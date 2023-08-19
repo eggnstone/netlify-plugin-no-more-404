@@ -1,0 +1,5 @@
+ncu -u
+npm i
+
+npm publish --access=public // first time
+npm publish                 // consecutive times

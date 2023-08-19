@@ -1,13 +1,24 @@
 {
+    "author": "Software-Entwicklung Eggenstein",
     "dependencies": {
         "@types/jest": "^29.5.3",
         "conf": "^11.0.2",
         "jest": "^29.6.2"
     },
-    "dev-dependencies": {
+    "description": "Simple replacement for the Netlify plugin `netlify-plugin-no-more-404`",
+    "devDependencies": {},
+    "directories": {
+        "test": "test"
     },
+    "files": [
+        "src/**/*"
+    ],
+    "keywords": [
+        "netlify", "404", "redirect"
+    ],
+    "license": "ISC",
     "main": "src/index.js",
-    "name": "netlify-plugin-no-more-404-eggnstone",
+    "name": "@eggnstone/netlify-plugin-no-more-404",
     "scripts": {
         "main": "node src/main.js",
         "test": "set \"NODE_OPTIONS=--experimental-vm-modules\" && npx jest"
