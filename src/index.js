@@ -14,7 +14,7 @@ async function test(data)
     const utils = data.utils;
 
     const cacheKeys = inputs.cacheKeys;
-    console.log("  cacheKeys: " + JSON.stringify(cacheKeys));
+    //console.log("  cacheKeys: " + JSON.stringify(cacheKeys));
 
     const constantsCacheDir = constants.CACHE_DIR;
     const constantsPublishDir = constants.PUBLISH_DIR;
@@ -22,7 +22,7 @@ async function test(data)
     const utilsBuild = utils.build;
 
     const configName = process.env.CONFIG_NAME;
-    console.log("  configName: " + configName);
+    //console.log("  configName: " + configName);
 
     if (!configName)
     {
@@ -47,7 +47,7 @@ async function test(data)
         return;
     }
 
-    console.log("  CacheKey found: " + cacheKey);
+    //console.log("  CacheKey found: " + cacheKey);
 
     const result = await Plugin.run({cacheDir: constantsCacheDir, publishDir: constantsPublishDir, cacheKey: cacheKey});
 

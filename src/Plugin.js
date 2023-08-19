@@ -7,14 +7,14 @@ export class Plugin
 {
     static async run({cacheDir, publishDir, cacheKey})
     {
-        console.log("# Plugin.run");
+        //console.log("# Plugin.run");
 
         const fullPublishDir = path.join(process.cwd(), publishDir);
 
-        console.log("  cacheDir:       " + cacheDir);
-        console.log("  publishDir:     " + publishDir);
-        console.log("  fullPublishDir: " + fullPublishDir);
-        console.log("  cacheKey:       " + cacheKey);
+        //console.log("  cacheDir:       " + cacheDir);
+        //console.log("  publishDir:     " + publishDir);
+        //console.log("  fullPublishDir: " + fullPublishDir);
+        //console.log("  cacheKey:       " + cacheKey);
 
         try
         {
@@ -26,7 +26,7 @@ export class Plugin
             {
                 console.log("  No data from previous run found. Saving current data.");
                 conf.set(cacheKey, newCollection);
-                console.log("  Data saved.");
+                //console.log("  Data saved.");
                 return {error: undefined, missingPaths: []};
             }
 
@@ -37,13 +37,13 @@ export class Plugin
                 const oldFullPath = path.join(fullPublishDir, oldShortPath, 'index.html');
                 if (fs.existsSync(oldFullPath))
                 {
-                    console.log("    OK   : " + oldFullPath);
+                    //console.log("  OK: " + oldShortPath);
                 }
                 else
                 {
                     if (oldShortPath.endsWith("\\"))
                     {
-                        console.log("    FAIL : " + oldFullPath);
+                        console.log("  Missing: " + oldShortPath);
                         missingPaths.push(oldShortPath);
                     }
                     else
@@ -51,11 +51,11 @@ export class Plugin
                         const oldFullPath2 = path.join(fullPublishDir, oldShortPath) + '.html';
                         if (fs.existsSync(oldFullPath2))
                         {
-                            console.log("    OK   : " + oldFullPath2);
+                            //console.log("  OK: " + oldShortPath);
                         }
                         else
                         {
-                            console.log("    FAIL : " + oldFullPath + " / " + oldFullPath2);
+                            console.log("  Missing: " + oldShortPath);
                             missingPaths.push(oldShortPath);
                         }
                     }
@@ -65,9 +65,10 @@ export class Plugin
             if (missingPaths.length > 0)
                 return {error: undefined, missingPaths: missingPaths};
 
-            console.log("  No missing paths found. Saving current data.");
+            console.log("  No missing paths found.");
+            //console.log("  No missing paths found. Saving current data.");
             conf.set(cacheKey, newCollection);
-            console.log("  Data saved.");
+            //console.log("  Data saved.");
 
             return {error: undefined, missingPaths: []};
         }
