@@ -11,6 +11,7 @@
         "test": "test"
     },
     "files": [
+        "manifest.yaml",
         "src/**/*"
     ],
     "keywords": [
@@ -24,5 +25,5 @@
         "test": "set \"NODE_OPTIONS=--experimental-vm-modules\" && npx jest"
     },
     "type": "module",
-    "version": "1.0.1"
+    "version": "1.0.5"
 }
