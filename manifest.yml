@@ -1,0 +1,8 @@
+name: netlify-plugin-no-more-404-eggnstone
+inputs:
+  - name: on404
+    description: on404 DESC
+  - name: cacheKey
+    description: cacheKey DESC
+  - name: debugMode
+    description: debugMode DESC
