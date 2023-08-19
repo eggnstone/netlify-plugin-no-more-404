@@ -16,7 +16,7 @@ export class Plugin
         {
             const newCollection = await Collector.collect({startPath: fullPublishDir, currentPath: fullPublishDir});
 
-            const conf = new Conf({cwd: cacheDir, configName: "netlify-plugin-no-more-404-eggnstone"});
+            const conf = new Conf({cwd: cacheDir, configName: "eggnstone-netlify-plugin-no-more-404"});
             const oldCollection = conf.get("cacheKey") || [];
             if (oldCollection.length === 0)
             {

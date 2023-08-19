@@ -1,4 +1,4 @@
-name: netlify-plugin-no-more-404-eggnstone
+name: eggnstone-netlify-plugin-no-more-404
 inputs:
   - name: on404
     description: on404 DESC

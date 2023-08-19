@@ -4,7 +4,7 @@ import {Plugin} from "../src/Plugin.js";
 
 export const onPreBuild = async function(data)
 {
-    console.log("# netlify-plugin-no-more-404-eggnstone: onPreBuild: START");
+    console.log("# eggnstone-netlify-plugin-no-more-404: onPreBuild: START");
 
     const constants = data.constants;
 
@@ -14,12 +14,12 @@ export const onPreBuild = async function(data)
     console.log("  constantsCacheDir:   " + constantsCacheDir);
     console.log("  constantsPublishDir: " + constantsPublishDir);
 
-    console.log("# netlify-plugin-no-more-404-eggnstone: onPreBuild: END");
+    console.log("# eggnstone-netlify-plugin-no-more-404: onPreBuild: END");
 };
 
 export const onPostBuild = async function(data)
 {
-    console.log("# netlify-plugin-no-more-404-eggnstone: onPostBuild: START");
+    console.log("# eggnstone-netlify-plugin-no-more-404: onPostBuild: START");
 
     //const inputs = data.inputs;
     const constants = data.constants;
@@ -33,5 +33,5 @@ export const onPostBuild = async function(data)
     if (result)
         utilsBuild.failBuild(result);
 
-    console.log("# netlify-plugin-no-more-404-eggnstone: onPostBuild: END");
+    console.log("# eggnstone-netlify-plugin-no-more-404: onPostBuild: END");
 };
