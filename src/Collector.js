@@ -19,16 +19,17 @@ export class Collector
                 const newCollection = await Collector.collect({startPath: startPath, currentPath: newPath});
                 collection.push(...newCollection);
             }
-            else if (newPath.endsWith(".html"))
-            {
-                let shortPath = path.relative(startPath, newPath);
-                if (shortPath.endsWith("index.html"))
-                    shortPath = shortPath.slice(0, -10);
-                else
-                    shortPath = shortPath.slice(0, -5);
 
-                collection.push(shortPath);
-            }
+            if (!newPath.endsWith(".html"))
+                continue;
+
+            let shortPath = path.relative(startPath, newPath);
+            if (shortPath.endsWith("index.html"))
+                shortPath = shortPath.slice(0, -10);
+            else
+                shortPath = shortPath.slice(0, -5);
+
+            collection.push(shortPath);
         }
 
         return collection;

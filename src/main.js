@@ -1,13 +1,18 @@
-import {Collector} from "./Collector.js";
 import path from "path";
+import {Plugin} from "./Plugin.js";
 
 (async () =>
 {
     console.log("# MAIN START");
 
-    const startPath = path.join(process.cwd(), "..", "..", "dist");
-    const collection = await Collector.collect({startPath: startPath, currentPath: startPath});
-    console.log("collection: " + JSON.stringify(collection, null, 4));
+    const cacheDir = path.join("..", "..", ".netlify", "cache");
+    const publishDir = path.join("..", "..", "dist");
+
+    const cacheKey = "CACHE_KEY";
+
+    const result = await Plugin.run({cacheDir: cacheDir, publishDir: publishDir, cacheKey: cacheKey});
+    if (result)
+        console.error(result);
 
     console.log("# MAIN END");
 })();
