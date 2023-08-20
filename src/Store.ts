@@ -3,17 +3,22 @@ import * as path from "path";
 
 export class Store
 {
+    private readonly path: string;
     private readonly fullPath: string;
 
     private data: { [key: string]: string[] } = {};
 
     public constructor(params: { path: string, configName: string })
     {
+        this.path = params.path;
         this.fullPath = path.join(params.path, params.configName) + ".json";
     }
 
     public read()
     {
+        if (!fs.existsSync(this.path))
+            throw new Error("Path not found: " + this.path);
+
         if (!fs.existsSync(this.fullPath))
         {
             this.data = {};
@@ -27,7 +32,10 @@ export class Store
 
     public write()
     {
-        fs.writeFileSync(this.fullPath, JSON.stringify(this.data));
+        if (!fs.existsSync(this.path))
+            throw new Error("Path not found: " + this.path);
+
+        fs.writeFileSync(this.fullPath, JSON.stringify(this.data, null, 0));
     }
 
     public get(cacheKey: string): string[]

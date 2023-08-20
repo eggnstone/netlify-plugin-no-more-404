@@ -30,7 +30,7 @@ export class SystemConfig
         if (!publishDir)
             return new SystemConfig({error: "publishDir not set.", fullCacheDir: "", fullPublishDir: ""});
 
-        const fullCacheDir = path.join(process.cwd(), cacheDir);
+        const fullCacheDir = cacheDir.startsWith("/") ? cacheDir : path.join(process.cwd(), cacheDir);
         console.log("    cacheDir:       " + cacheDir);
         console.log("    fullCacheDir:   " + fullCacheDir);
 

@@ -2,14 +2,14 @@ import {UserConfig} from "../src/UserConfig";
 
 describe("userConfig", function ()
 {
-    it("Undefined inputs should give an error.", function ()
+    it("Undefined inputs should return an error.", function ()
     {
         const userConfig = UserConfig.create(undefined);
 
         expect(userConfig.error).toBe("inputs not set.");
     });
 
-    it("Missing on404 should give an error.", function ()
+    it("Missing on404 should return an error.", function ()
     {
         const inputs = {};
 
@@ -27,7 +27,7 @@ describe("userConfig", function ()
         expect(userConfig.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
     });
 
-    it("Using cacheKey should give no error.", function ()
+    it("Using cacheKey should return no error.", function ()
     {
         const inputs = {on404: "error", cacheKey: "SomeCacheKey"};
 
@@ -36,7 +36,7 @@ describe("userConfig", function ()
         expect(userConfig.error).toBeUndefined();
     });
 
-    it("Using environmentVariableName without cacheKeys should give an error.", function ()
+    it("Using environmentVariableName without cacheKeys should return an error.", function ()
     {
         const inputs = {on404: "error", environmentVariableName: "SomeVariableName"};
 
@@ -45,7 +45,7 @@ describe("userConfig", function ()
         expect(userConfig.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
     });
 
-    it("Using cacheKeys without environmentVariableName should give an error.", function ()
+    it("Using cacheKeys without environmentVariableName should return an error.", function ()
     {
         const inputs = {on404: "error", cacheKeys: []};
 
@@ -54,7 +54,7 @@ describe("userConfig", function ()
         expect(userConfig.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
     });
 
-    it("using an unset environmentVariable should give an error.", function ()
+    it("using an unset environmentVariable should return an error.", function ()
     {
         const inputs = {on404: "error", environmentVariableName: "SomeVariableName", cacheKeys: []};
 
