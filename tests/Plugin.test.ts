@@ -18,13 +18,13 @@ describe("Plugin", function ()
             expect(systemConfig.error).toBeUndefined();
 
             const cacheKey = "MainPageAndSubPage";
-            const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey}, false);
+            const userConfig = UserConfig.create({on404: "error", cacheKey}, false);
             expect(userConfig.error).toBeUndefined();
 
             const redirectConfig = RedirectConfig.create([]);
             expect(redirectConfig.error).toBeUndefined();
 
-            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const config = new Config({systemConfig, userConfig, redirectConfig});
             const actual = await Plugin.run(config, {logAll: false, write: false});
 
             assert(actual.error);
@@ -40,13 +40,13 @@ describe("Plugin", function ()
             expect(systemConfig.error).toBeUndefined();
 
             const cacheKey = "MainPageAndSubPage";
-            const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey}, false);
+            const userConfig = UserConfig.create({on404: "error", cacheKey}, false);
             expect(userConfig.error).toBeUndefined();
 
             const redirectConfig = RedirectConfig.create([]);
             expect(redirectConfig.error).toBeUndefined();
 
-            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const config = new Config({systemConfig, userConfig, redirectConfig});
             const actual = await Plugin.run(config, {logAll: false, write: false});
 
             expect(actual.error).toBeUndefined();
@@ -61,13 +61,13 @@ describe("Plugin", function ()
             expect(systemConfig.error).toBeUndefined();
 
             const cacheKey = "MainPageAndSubPage";
-            const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey}, false);
+            const userConfig = UserConfig.create({on404: "error", cacheKey}, false);
             expect(userConfig.error).toBeUndefined();
 
             const redirectConfig = RedirectConfig.create([]);
             expect(redirectConfig.error).toBeUndefined();
 
-            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const config = new Config({systemConfig, userConfig, redirectConfig});
             const actual = await Plugin.run(config, {logAll: false, write: false});
 
             expect(actual.error).toBeUndefined();
@@ -82,13 +82,13 @@ describe("Plugin", function ()
             expect(systemConfig.error).toBeUndefined();
 
             const cacheKey = "MainPageAndSubPage";
-            const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey}, false);
+            const userConfig = UserConfig.create({on404: "error", cacheKey}, false);
             expect(userConfig.error).toBeUndefined();
 
             const redirectConfig = RedirectConfig.create([]);
             expect(redirectConfig.error).toBeUndefined();
 
-            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const config = new Config({systemConfig, userConfig, redirectConfig});
             const actual = await Plugin.run(config, {logAll: false, write: false});
 
             expect(actual.error).toBeUndefined();
@@ -103,13 +103,13 @@ describe("Plugin", function ()
             expect(systemConfig.error).toBeUndefined();
 
             const cacheKey = "MainPageAndSubPage";
-            const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey}, false);
+            const userConfig = UserConfig.create({on404: "error", cacheKey}, false);
             expect(userConfig.error).toBeUndefined();
 
             const redirectConfig = RedirectConfig.create([]);
             expect(redirectConfig.error).toBeUndefined();
 
-            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const config = new Config({systemConfig, userConfig, redirectConfig});
             const actual = await Plugin.run(config, {logAll: false, write: false});
 
             expect(actual.error).toBeUndefined();
@@ -124,13 +124,13 @@ describe("Plugin", function ()
             expect(systemConfig.error).toBeUndefined();
 
             const cacheKey = "MainPageAndSubPage";
-            const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey}, false);
+            const userConfig = UserConfig.create({on404: "error", cacheKey}, false);
             expect(userConfig.error).toBeUndefined();
 
             const redirectConfig = RedirectConfig.create([]);
             expect(redirectConfig.error).toBeUndefined();
 
-            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const config = new Config({systemConfig, userConfig, redirectConfig});
             const actual = await Plugin.run(config, {logAll: false, write: false});
 
             expect(actual.error).toBeUndefined();

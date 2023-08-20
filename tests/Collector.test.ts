@@ -9,7 +9,7 @@ describe("Collector", function ()
         {
             const startPath = path.join(process.cwd(), "tests", "data", "AllOk", "dist");
 
-            const actual: any[] = await Collector.collect({startPath: startPath, currentPath: startPath});
+            const actual: any[] = await Collector.collect({startPath, currentPath: startPath});
 
             expect(actual).toStrictEqual(["index.html", "main.html", "sub\\index.html", "sub\\sub.html"]);
         });

@@ -19,7 +19,7 @@ import {Config} from "./Config";
     }
 
     const cacheKey = "CACHE_KEY";
-    const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey}, true);
+    const userConfig = UserConfig.create({on404: "error", cacheKey}, true);
     if (userConfig.error)
     {
         console.error(userConfig.error);
@@ -29,7 +29,7 @@ import {Config} from "./Config";
     const redirectConfig = RedirectConfig.create([]);
     expect(redirectConfig.error).toBeUndefined();
 
-    const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+    const config = new Config({systemConfig, userConfig, redirectConfig});
     const result = await Plugin.run(config, {logAll: true, write: true});
     if (result)
         console.error(result);

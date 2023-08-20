@@ -41,6 +41,6 @@ export class SystemConfig
             console.log("    fullPublishDir: " + fullPublishDir);
         }
 
-        return new SystemConfig({fullCacheDir: fullCacheDir, fullPublishDir: fullPublishDir});
+        return new SystemConfig({fullCacheDir, fullPublishDir});
     }
 }

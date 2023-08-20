@@ -16,6 +16,6 @@ export class RedirectConfig
     {
         // "redirects":[{"from":"/blog/category/*","query":{},"to":"/blog-category/:splat","force":false,"conditions":{},"headers":{}}]}
 
-        return new RedirectConfig({redirects: redirects});
+        return new RedirectConfig({redirects});
     }
 }

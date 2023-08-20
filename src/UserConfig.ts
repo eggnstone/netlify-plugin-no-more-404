@@ -51,11 +51,11 @@ export class UserConfig
         else
         {
             if (!environmentVariableName || !cacheKeys)
-                return new UserConfig({error: "cacheKey not set, then cacheKeys and environmentVariableName must be set.", on404: on404});
+                return new UserConfig({error: "cacheKey not set, then cacheKeys and environmentVariableName must be set.", on404});
 
             const environmentVariableValue = process.env[environmentVariableName];
             if (!environmentVariableValue)
-                return new UserConfig({error: "Environment variable \"" + environmentVariableName + "\" not set.", on404: on404});
+                return new UserConfig({error: "Environment variable \"" + environmentVariableName + "\" not set.", on404});
 
             let key;
             for (key of cacheKeys)
@@ -68,11 +68,11 @@ export class UserConfig
             }
 
             if (!cacheKey)
-                new UserConfig({error: "No cache key found for \"" + environmentVariableValue + "\" in " + JSON.stringify(cacheKeys) + ".", on404: on404});
+                new UserConfig({error: "No cache key found for \"" + environmentVariableValue + "\" in " + JSON.stringify(cacheKeys) + ".", on404});
 
             if (logAll) console.log("    Final cacheKey: " + cacheKey);
         }
 
-        return new UserConfig({on404: on404, cacheKey: cacheKey, debug: debug});
+        return new UserConfig({on404, cacheKey, debug});
     }
 }

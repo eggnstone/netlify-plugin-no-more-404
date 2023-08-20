@@ -10,9 +10,6 @@ export class Checker
     static async check(params: { data: any, complete: boolean }): Promise<void>
     {
         logBlue("# eggnstone-netlify-plugin-no-more-404 START");
-        logBlue("# eggnstone-netlify-plugin-no-more-404 START");
-        logBlue("# eggnstone-netlify-plugin-no-more-404 START");
-        logBlue("# eggnstone-netlify-plugin-no-more-404 START");
 
         if (params.complete)
             console.log("  Performing full check.");
@@ -50,11 +47,13 @@ export class Checker
         if (!params.complete)
         {
             logGreen("  Preflight check OK. We're good to go.");
+            logGreen("  Preflight check OK. We're good to go.");
+            logBlue("# eggnstone-netlify-plugin-no-more-404 END");
             logBlue("# eggnstone-netlify-plugin-no-more-404 END");
             return;
         }
 
-        const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+        const config = new Config({systemConfig, userConfig, redirectConfig});
         const result = await Plugin.run(config, {logAll: true, write: true});
 
         let error;
