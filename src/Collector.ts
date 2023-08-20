@@ -3,7 +3,7 @@ import * as path from "path";
 
 export class Collector
 {
-    static async collect(params: { startPath: string; currentPath: string; }): Promise<string[]>
+    static async collect(params: { startPath: string, currentPath: string }): Promise<string[]>
     {
         const collection = [];
 
@@ -21,10 +21,10 @@ export class Collector
                 continue;
 
             let shortPath = path.relative(params.startPath, newPath);
-            if (shortPath.endsWith("index.html"))
+            /*if (shortPath.endsWith("index.html"))
                 shortPath = shortPath.slice(0, -10);
             else
-                shortPath = shortPath.slice(0, -5);
+                shortPath = shortPath.slice(0, -5);*/
 
             collection.push(shortPath);
         }
