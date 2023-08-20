@@ -1,7 +1,7 @@
 import {Plugin} from "./Plugin";
 import {UserConfig} from "./UserConfig";
 import {SystemConfig} from "./SystemConfig";
-import {logError, logGreen, logLightBlue} from "./Log";
+import {logBlue, logError, logGreen} from "./Log";
 
 // noinspection JSUnusedGlobalSymbols
 export const onPreBuild = (data: any) => check({data: data, complete: false});
@@ -11,7 +11,7 @@ export const onPostBuild = (data: any) => check({data: data, complete: true});
 
 async function check(params: { data: any, complete: boolean }): Promise<void>
 {
-    logLightBlue("# eggnstone-netlify-plugin-no-more-404/check: START");
+    logBlue("# eggnstone-netlify-plugin-no-more-404/check: START");
 
     if (params.complete)
         console.log("  Performing full check.");
@@ -43,7 +43,7 @@ async function check(params: { data: any, complete: boolean }): Promise<void>
     if (!params.complete)
     {
         logGreen("  Preflight check OK. We're good to go.");
-        logLightBlue("# eggnstone-netlify-plugin-no-more-404/check: END");
+        logBlue("# eggnstone-netlify-plugin-no-more-404/check: END");
         return;
     }
 
@@ -58,7 +58,7 @@ async function check(params: { data: any, complete: boolean }): Promise<void>
     if (error)
         logError("  " + error);
 
-    logLightBlue("# eggnstone-netlify-plugin-no-more-404/check: END");
+    logBlue("# eggnstone-netlify-plugin-no-more-404/check: END");
 
     if (!error)
         return

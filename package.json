@@ -1,6 +1,7 @@
 {
     "author": "Software-Entwicklung Eggenstein",
     "dependencies": {
+        "colors": "^1.4.0"
     },
     "description": "Simple replacement for the Netlify plugin `netlify-plugin-no-more-404`",
     "devDependencies": {
@@ -29,5 +30,5 @@
         "test": "jest --config jestconfig.json"
     },
     "types": "lib/index.d.ts",
-    "version": "1.0.12"
+    "version": "1.0.13"
 }
