@@ -14,24 +14,23 @@ export class Plugin
             if (!fs.existsSync(config.systemConfig.fullPublishDir))
                 return {error: `Publish directory not found: ${config.systemConfig.fullPublishDir}`, missingPaths: [], redirectedPaths: []};
 
-            const newCollection = await Collector.collect({startPath: config.systemConfig.fullPublishDir, currentPath: config.systemConfig.fullPublishDir});
+            const newShortPaths = await Collector.collect({startPath: config.systemConfig.fullPublishDir, currentPath: config.systemConfig.fullPublishDir});
 
             const store = new Store({path: config.systemConfig.fullCacheDir, configName: "eggnstone-netlify-plugin-no-more-404"});
-            const oldCollection = store.readAndGet(config.userConfig.cacheKey);
-            //console.log("  oldCollection: " + JSON.stringify(oldCollection));
+            const oldShortPaths = store.readAndGet(config.userConfig.cacheKey);
 
-            if (!oldCollection)
+            if (!oldShortPaths)
             {
                 if (params.logAll) logGreen("  No data from previous run found. Saving current data.");
                 if (params.write)
-                    store.setAndWrite(config.userConfig.cacheKey, newCollection);
+                    store.setAndWrite(config.userConfig.cacheKey, newShortPaths);
 
                 return {error: undefined, missingPaths: [], redirectedPaths: []};
             }
 
             if (params.logAll) console.log("  Data from previous run found. Comparing with current data.");
             const missingShortPaths = [];
-            for (let oldShortPath of oldCollection)
+            for (let oldShortPath of oldShortPaths)
             {
                 const oldFullPath = path.join(config.systemConfig.fullPublishDir, oldShortPath);
                 if (!fs.existsSync(oldFullPath))
@@ -45,7 +44,7 @@ export class Plugin
             {
                 if (params.logAll) logGreen("  No paths missing. We're good to go.");
                 if (params.write)
-                    store.setAndWrite(config.userConfig.cacheKey, newCollection);
+                    store.setAndWrite(config.userConfig.cacheKey, newShortPaths);
 
                 return {error: undefined, missingPaths: [], redirectedPaths: []};
             }
@@ -87,7 +86,10 @@ export class Plugin
             {
                 if (params.logAll) logGreen("  No paths missing (after applying redirects). We're good to go.");
                 if (params.write)
-                    store.setAndWrite(config.userConfig.cacheKey, newCollection);
+                {
+                    const combinedCollection = redirectedShortPaths.concat(newShortPaths);
+                    store.setAndWrite(config.userConfig.cacheKey, combinedCollection);
+                }
 
                 return {error: undefined, missingPaths: [], redirectedPaths: redirectedShortPaths};
             }
