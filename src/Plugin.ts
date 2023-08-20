@@ -4,6 +4,7 @@ import {Collector} from "./Collector";
 import {Store} from "./Store";
 import {UserConfig} from "./UserConfig";
 import {SystemConfig} from "./SystemConfig";
+import {logGreen, logRed} from "./Log";
 
 export class Plugin
 {
@@ -18,11 +19,11 @@ export class Plugin
 
             const store = new Store({path: params.systemConfig.fullCacheDir, configName: "eggnstone-netlify-plugin-no-more-404"});
             const oldCollection = store.readAndGet(params.userConfig.cacheKey);
-            console.log("  oldCollection: " + JSON.stringify(oldCollection));
+            //console.log("  oldCollection: " + JSON.stringify(oldCollection));
 
             if (!oldCollection)
             {
-                console.log("  No data from previous run found. Saving current data.");
+                logGreen("  No data from previous run found. Saving current data.");
                 store.setAndWrite(params.userConfig.cacheKey, newCollection);
                 //console.log("  Data saved.");
                 return {error: undefined, missingPaths: []};
@@ -32,38 +33,18 @@ export class Plugin
             const missingPaths = [];
             for (let oldShortPath of oldCollection)
             {
-                const oldFullPath = path.join(params.systemConfig.fullPublishDir, oldShortPath);//, 'index.html');
-                if (fs.existsSync(oldFullPath))
+                const oldFullPath = path.join(params.systemConfig.fullPublishDir, oldShortPath);
+                if (!fs.existsSync(oldFullPath))
                 {
-                    //console.log("  OK: " + oldShortPath);
-                }
-                else
-                {
-                    /*if (oldShortPath.endsWith("\\") || oldShortPath.endsWith("/"))
-                    {
-                        console.log("  Missing: " + oldShortPath);
-                        missingPaths.push(oldShortPath);
-                    }
-                    else*/
-                    {
-                        const oldFullPath2 = path.join(params.systemConfig.fullPublishDir, oldShortPath);// + '.html';
-                        if (fs.existsSync(oldFullPath2))
-                        {
-                            //console.log("  OK: " + oldShortPath);
-                        }
-                        else
-                        {
-                            console.log("  Missing: " + oldShortPath);
-                            missingPaths.push(oldShortPath);
-                        }
-                    }
+                    logRed("  Missing: " + oldShortPath);
+                    missingPaths.push(oldShortPath);
                 }
             }
 
             if (missingPaths.length > 0)
                 return {error: undefined, missingPaths: missingPaths};
 
-            console.log("  No missing paths found. We're good to go.");
+            logGreen("  No missing paths found. We're good to go.");
             //console.log("  No missing paths found. Saving current data.");
             store.setAndWrite(params.userConfig.cacheKey, newCollection);
             //console.log("  Data saved.");

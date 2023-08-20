@@ -1,6 +1,7 @@
 import {Plugin} from "./Plugin";
 import {UserConfig} from "./UserConfig";
 import {SystemConfig} from "./SystemConfig";
+import {logError, logGreen, logLightBlue} from "./Log";
 
 // noinspection JSUnusedGlobalSymbols
 export const onPreBuild = (data: any) => check({data: data, complete: false});
@@ -10,13 +11,18 @@ export const onPostBuild = (data: any) => check({data: data, complete: true});
 
 async function check(params: { data: any, complete: boolean }): Promise<void>
 {
-    console.log("# eggnstone-netlify-plugin-no-more-404/check: START");
+    logLightBlue("# eggnstone-netlify-plugin-no-more-404/check: START");
 
-    if (!params.complete)
-        console.log("  Preflight check only.");
+    if (params.complete)
+        console.log("  Performing full check.");
+    else
+        console.log("  Performing preflight check only.");
 
     // noinspection JSUnresolvedReference
     const utilsBuild = params.data.utils.build;
+
+    // noinspection JSUnresolvedReference
+    //utilsBuild.failBuild("test");
 
     const systemConfig = SystemConfig.create(params.data.constants);
     if (systemConfig.error)
@@ -34,33 +40,37 @@ async function check(params: { data: any, complete: boolean }): Promise<void>
         return;
     }
 
-    const result = await Plugin.run({systemConfig: systemConfig, userConfig: userConfig});
-
-    if (result.error)
+    if (!params.complete)
     {
-        if (userConfig.on404 === "warn")
-        {
-            // noinspection JSUnresolvedReference
-            utilsBuild.failPlugin(result.error);
-        }
-        else
-        {
-            // noinspection JSUnresolvedReference
-            utilsBuild.failBuild(result.error);
-        }
+        logGreen("  Preflight check OK. We're good to go.");
+        logLightBlue("# eggnstone-netlify-plugin-no-more-404/check: END");
+        return;
     }
 
-    if (result.missingPaths.length > 0)
-        if (userConfig.on404 === "warn")
-        {
-            // noinspection JSUnresolvedReference
-            utilsBuild.failPlugin(result.missingPaths.length + " missing paths found.");
-        }
-        else
-        {
-            // noinspection JSUnresolvedReference
-            utilsBuild.failBuild(result.missingPaths.length + " missing paths found.");
-        }
+    const result = await Plugin.run({systemConfig: systemConfig, userConfig: userConfig});
 
-    console.log("# eggnstone-netlify-plugin-no-more-404/check: END");
+    let error;
+    if (result.error)
+        error = result.error;
+    else if (result.missingPaths.length > 0)
+        error = result.missingPaths.length + " missing paths found.";
+
+    if (error)
+        logError("  " + error);
+
+    logLightBlue("# eggnstone-netlify-plugin-no-more-404/check: END");
+
+    if (!error)
+        return
+
+    if (userConfig.on404 === "warn")
+    {
+        // noinspection JSUnresolvedReference
+        utilsBuild.failPlugin(error);
+    }
+    else
+    {
+        // noinspection JSUnresolvedReference
+        utilsBuild.failBuild(error);
+    }
 }

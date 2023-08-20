@@ -9,7 +9,7 @@ import {SystemConfig} from "./SystemConfig";
 
     const cacheDir = path.join("..", "..", ".netlify", "cache");
     const publishDir = path.join("..", "..", "dist");
-    const systemConfig = SystemConfig.create({constants: {CACHE_DIR: cacheDir, PUBLISH_DIR: publishDir}});
+    const systemConfig = SystemConfig.create({CACHE_DIR: cacheDir, PUBLISH_DIR: publishDir});
     if (systemConfig.error)
     {
         console.error(systemConfig.error);
@@ -17,7 +17,7 @@ import {SystemConfig} from "./SystemConfig";
     }
 
     const cacheKey = "CACHE_KEY";
-    const userConfig = UserConfig.create({inputs: {on404: "error", cacheKey: cacheKey}});
+    const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey});
     if (userConfig.error)
     {
         console.error(userConfig.error);

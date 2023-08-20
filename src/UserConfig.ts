@@ -1,9 +1,8 @@
 export class UserConfig
 {
-    private readonly _error?: string;
-
-    private readonly _on404: string;
-    private readonly _cacheKey: string;
+    public readonly error?: string;
+    public readonly on404: string;
+    public readonly cacheKey: string;
 
     private constructor(params: {
         error?: string,
@@ -11,24 +10,9 @@ export class UserConfig
         cacheKey?: string
     })
     {
-        this._error = params.error;
-        this._on404 = params.on404 == "warn" ? "warn" : "error";
-        this._cacheKey = params.cacheKey ?? "";
-    }
-
-    public get error()
-    {
-        return this._error;
-    }
-
-    public get on404()
-    {
-        return this._on404;
-    }
-
-    public get cacheKey()
-    {
-        return this._cacheKey;
+        this.error = params.error;
+        this.on404 = params.on404 == "warn" ? "warn" : "error";
+        this.cacheKey = params.cacheKey ?? "";
     }
 
     public static create(inputs: any): UserConfig
@@ -41,6 +25,11 @@ export class UserConfig
 
         const cacheKeys = inputs["cacheKeys"];
         const environmentVariableName = inputs["environmentVariableName"];
+
+        console.log("    on404:          " + on404);
+        console.log("    cacheKey:       " + cacheKey);
+        console.log("    cacheKeys:      " + JSON.stringify(cacheKeys));
+        console.log("    envVarName:     " + environmentVariableName);
 
         if (on404 != "warn" && on404 != "error")
             return new UserConfig({error: "on404 must be \"error\" or \"warn\"."});
@@ -59,34 +48,21 @@ export class UserConfig
             if (!environmentVariableValue)
                 return new UserConfig({error: "Environment variable \"" + environmentVariableName + "\" not set.", on404: on404});
 
-            cacheKey = cacheKeys[environmentVariableValue];
+            let key;
+            for (key of cacheKeys)
+            {
+                if (key.startsWith(environmentVariableValue + "_"))
+                {
+                    cacheKey = key;
+                    break;
+                }
+            }
+
             if (!cacheKey)
                 new UserConfig({error: "No cache key found for \"" + environmentVariableValue + "\" in " + JSON.stringify(cacheKeys) + ".", on404: on404});
+
+            console.log("    Final cacheKey: " + cacheKey);
         }
-
-        /*
-
-
-let cacheKey;
-    let key;
-    for (key of config.cacheKeys)
-    {
-        if (key.startsWith(configName + "_"))
-        {
-            cacheKey = key;
-            break;
-        }
-    }
-
-
-
-    if (!cacheKey)
-    {
-        utilsBuild.failBuild("No matching cache key found for CONFIG_NAME=" + configName);
-        return;
-    }
-
-         */
 
         return new UserConfig({on404: on404, cacheKey: cacheKey});
     }
