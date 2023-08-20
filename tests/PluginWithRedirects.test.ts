@@ -24,10 +24,11 @@ describe("Plugin", function ()
             expect(redirectConfig.error).toBeUndefined();
 
             const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
-            const actual = await Plugin.run(config, {logAll: true, write: false});
+            const actual = await Plugin.run(config, {logAll: false, write: false});
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths).toStrictEqual([]);
+            expect(actual.redirectedPaths).toStrictEqual(["main.html"]);
         });
     });
 });

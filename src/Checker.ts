@@ -39,8 +39,6 @@ export class Checker
         }
 
         const redirectConfig = RedirectConfig.create(params.data["netlifyConfig"]["redirects"]);
-        console.log("    redirects:                " + JSON.stringify(params.data["netlifyConfig"]["redirects"]));
-        console.log("    redirectConfig.redirects: " + JSON.stringify(redirectConfig.redirects));
         if (redirectConfig.error)
         {
             // noinspection JSUnresolvedReference
