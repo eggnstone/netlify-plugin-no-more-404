@@ -46,3 +46,8 @@ export function logBlue(s: string)
 {
     console.log(colors.blue(s));
 }
+
+export function logOrange(s: string)
+{
+    console.log(colors.yellow(s));
+}

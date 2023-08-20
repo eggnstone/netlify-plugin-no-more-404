@@ -20,7 +20,7 @@ describe("Plugin", function ()
             const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey}, false);
             expect(userConfig.error).toBeUndefined();
 
-            const redirectConfig = RedirectConfig.create([{"from": "main.html", "to": "main2.html"}]);
+            const redirectConfig = RedirectConfig.create([{"from": "/main.html", "to": "/main2.html"}]);
             expect(redirectConfig.error).toBeUndefined();
 
             const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});

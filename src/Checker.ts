@@ -38,6 +38,7 @@ export class Checker
             return;
         }
 
+        //console.log("    redirects:                " + JSON.stringify(params.data["netlifyConfig"]["redirects"]));
         const redirectConfig = RedirectConfig.create(params.data["netlifyConfig"]["redirects"]);
         if (redirectConfig.error)
         {
@@ -58,12 +59,14 @@ export class Checker
 
         let error;
         if (result.error)
+        {
             error = result.error;
-        else if (result.missingPaths.length > 0)
-            error = result.missingPaths.length + " paths missing.";
-
-        if (error)
             logError("  " + error);
+        }
+        else if (result.missingPaths.length > 0)
+        {
+            error = result.missingPaths.length + " paths missing.";
+        }
 
         logBlue("# eggnstone-netlify-plugin-no-more-404 END");
 

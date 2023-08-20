@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import {Collector} from "./Collector";
 import {Store} from "./Store";
-import {logGreen, logRed} from "./Log";
+import {logGreen, logOrange, logRed} from "./Log";
 import {Config} from "./Config";
 
 export class Plugin
@@ -35,7 +35,7 @@ export class Plugin
                 const oldFullPath = path.join(config.systemConfig.fullPublishDir, oldShortPath);
                 if (!fs.existsSync(oldFullPath))
                 {
-                    if (params.logAll) logRed("  Missing: " + oldShortPath);
+                    if (params.logAll) logOrange("  Missing: " + oldShortPath);
                     missingShortPaths.push(oldShortPath);
                 }
             }
@@ -52,21 +52,31 @@ export class Plugin
             if (config.redirectConfig.redirects.length == 0)
                 return {error: undefined, missingPaths: missingShortPaths, redirectedPaths: []};
 
-            if (params.logAll) logRed("  " + missingShortPaths.length + " paths missing.");
+            if (params.logAll) logOrange("  " + missingShortPaths.length + " paths missing.");
 
             const redirectedShortPaths = [];
             const stillMissingShortPaths = [];
-            //for (let missingShortPathIndex = missingShortPaths.length - 1; missingShortPathIndex >= 0; missingShortPathIndex--)
             for (const missingShortPath of missingShortPaths)
             {
                 let redirectFound = false;
                 for (const redirect of config.redirectConfig.redirects)
                 {
-                    const from = redirect["from"];
-                    const to = redirect["to"];
-                    if (missingShortPath == from)
+                    let from = redirect["from"];
+                    let to = redirect["to"];
+                    //console.log("  Checking 1: " + from + " -> " + to);
+
+                    if (!from.endsWith("/") && !from.endsWith("\\") && !from.endsWith(".html"))
+                        from += ".html";
+
+                    if (!to.endsWith("/") && !to.endsWith("\\") && !to.endsWith(".html"))
+                        to += ".html";
+
+                    //console.log("  Checking 2: " + from + " -> " + to);
+
+                    if ("/" + missingShortPath == from)
                     {
                         const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, to);
+                        //console.log("  Checking: " + redirectedFullPath);
                         if (fs.existsSync(redirectedFullPath))
                         {
                             if (params.logAll) console.log("  Redirected: " + missingShortPath + " -> " + to);
