@@ -2,6 +2,8 @@ import * as path from "path";
 import {Plugin} from "./Plugin";
 import {UserConfig} from "./UserConfig";
 import {SystemConfig} from "./SystemConfig";
+import {RedirectConfig} from "./RedirectConfig";
+import {Config} from "./Config";
 
 (async () =>
 {
@@ -24,7 +26,11 @@ import {SystemConfig} from "./SystemConfig";
         return;
     }
 
-    const result = await Plugin.run({systemConfig: systemConfig, userConfig: userConfig});
+    const redirectConfig = RedirectConfig.create({});
+    expect(redirectConfig.error).toBeUndefined();
+
+    const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+    const result = await Plugin.run(config);
     if (result)
         console.error(result);
 

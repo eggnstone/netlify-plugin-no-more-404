@@ -2,6 +2,8 @@ import {Plugin} from "./Plugin";
 import {UserConfig} from "./UserConfig";
 import {SystemConfig} from "./SystemConfig";
 import {logBlue, logError, logGreen} from "./Log";
+import {RedirectConfig} from "./RedirectConfig";
+import {Config} from "./Config";
 
 export class Checker
 {
@@ -36,6 +38,16 @@ export class Checker
             return;
         }
 
+        const redirectConfig = RedirectConfig.create(params.data["netlifyConfig"]["redirects"]);
+        console.log("    redirects:                " + JSON.stringify(params.data["netlifyConfig"]["redirects"]));
+        console.log("    redirectConfig.redirects: " + JSON.stringify(redirectConfig.redirects));
+        if (redirectConfig.error)
+        {
+            // noinspection JSUnresolvedReference
+            utilsBuild.failBuild(redirectConfig.error);
+            return;
+        }
+
         if (!params.complete)
         {
             logGreen("  Preflight check OK. We're good to go.");
@@ -43,7 +55,8 @@ export class Checker
             return;
         }
 
-        const result = await Plugin.run({systemConfig: systemConfig, userConfig: userConfig});
+        const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+        const result = await Plugin.run(config);
 
         let error;
         if (result.error)

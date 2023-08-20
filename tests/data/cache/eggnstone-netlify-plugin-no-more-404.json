@@ -1,1 +1,8 @@
-{"MainPageAndSubPage":["index.html","main.html","sub\\index.html","sub\\sub.html"]}
+{
+    "MainPageAndSubPage": [
+        "index.html",
+        "main.html",
+        "sub\\index.html",
+        "sub\\sub.html"
+    ]
+}

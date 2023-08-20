@@ -3,6 +3,8 @@ import * as path from "path";
 import {UserConfig} from "../src/UserConfig";
 import {SystemConfig} from "../src/SystemConfig";
 import * as assert from "assert";
+import {RedirectConfig} from "../src/RedirectConfig";
+import {Config} from "../src/Config";
 
 describe("Plugin", function ()
 {
@@ -19,7 +21,11 @@ describe("Plugin", function ()
             const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey});
             expect(userConfig.error).toBeUndefined();
 
-            const actual = await Plugin.run({systemConfig: systemConfig, userConfig: userConfig});
+            const redirectConfig = RedirectConfig.create({});
+            expect(redirectConfig.error).toBeUndefined();
+
+            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const actual = await Plugin.run(config);
 
             assert(actual.error);
             expect(actual.error.startsWith("Error: Path not found: ")).toBeTruthy();
@@ -37,10 +43,13 @@ describe("Plugin", function ()
             const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey});
             expect(userConfig.error).toBeUndefined();
 
-            const actual = await Plugin.run({systemConfig: systemConfig, userConfig: userConfig});
+            const redirectConfig = RedirectConfig.create({});
+            expect(redirectConfig.error).toBeUndefined();
+
+            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const actual = await Plugin.run(config);
 
             expect(actual.error).toBeUndefined();
-            expect(actual.missingPaths.length).toBe(0);
             expect(actual.missingPaths).toStrictEqual([]);
         });
 
@@ -55,7 +64,11 @@ describe("Plugin", function ()
             const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey});
             expect(userConfig.error).toBeUndefined();
 
-            const actual = await Plugin.run({systemConfig: systemConfig, userConfig: userConfig});
+            const redirectConfig = RedirectConfig.create({});
+            expect(redirectConfig.error).toBeUndefined();
+
+            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const actual = await Plugin.run(config);
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths).toStrictEqual(["main.html"]);
@@ -72,7 +85,11 @@ describe("Plugin", function ()
             const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey});
             expect(userConfig.error).toBeUndefined();
 
-            const actual = await Plugin.run({systemConfig: systemConfig, userConfig: userConfig});
+            const redirectConfig = RedirectConfig.create({});
+            expect(redirectConfig.error).toBeUndefined();
+
+            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const actual = await Plugin.run(config);
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths).toStrictEqual(["index.html"]);
@@ -89,7 +106,11 @@ describe("Plugin", function ()
             const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey});
             expect(userConfig.error).toBeUndefined();
 
-            const actual = await Plugin.run({systemConfig: systemConfig, userConfig: userConfig});
+            const redirectConfig = RedirectConfig.create({});
+            expect(redirectConfig.error).toBeUndefined();
+
+            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const actual = await Plugin.run(config);
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths).toStrictEqual(["sub\\sub.html"]);
@@ -106,7 +127,11 @@ describe("Plugin", function ()
             const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey});
             expect(userConfig.error).toBeUndefined();
 
-            const actual = await Plugin.run({systemConfig: systemConfig, userConfig: userConfig});
+            const redirectConfig = RedirectConfig.create({});
+            expect(redirectConfig.error).toBeUndefined();
+
+            const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
+            const actual = await Plugin.run(config);
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths).toStrictEqual(["sub\\index.html"]);
