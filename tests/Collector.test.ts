@@ -7,7 +7,7 @@ describe("Collector", function ()
     {
         it("'AllOk' should return non-empty array of paths.", async function ()
         {
-            const startPath = path.join(process.cwd(), "tests", "AllOk", "dist");
+            const startPath = path.join(process.cwd(), "tests", "data", "AllOk", "dist");
 
             const actual: any[] = await Collector.collect({startPath: startPath, currentPath: startPath});
 

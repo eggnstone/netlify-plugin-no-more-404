@@ -10,8 +10,8 @@ describe("Plugin", function ()
     {
         it("Missing cache file should return an error.", async function ()
         {
-            const cacheDir = path.join("tests", "missing-cache-path");
-            const publishDir = path.join("tests", "AllOk", "dist");
+            const cacheDir = path.join("tests", "data", "missing-cache-path");
+            const publishDir = path.join("tests", "data", "AllOk", "dist");
             const systemConfig = SystemConfig.create({CACHE_DIR: cacheDir, PUBLISH_DIR: publishDir});
             expect(systemConfig.error).toBeUndefined();
 
@@ -23,13 +23,13 @@ describe("Plugin", function ()
 
             assert(actual.error);
             expect(actual.error.startsWith("Error: Path not found: ")).toBeTruthy();
-            expect(actual.error.endsWith("\\@eggnstone-netlify-plugin-no-more-404\\tests\\missing-cache-path")).toBeTruthy();
+            expect(actual.error.endsWith("\\@eggnstone-netlify-plugin-no-more-404\\tests\\data\\missing-cache-path")).toBeTruthy();
         });
 
         it("'AllOk' should return no error and empty missing-list.", async function ()
         {
-            const cacheDir = path.join("tests", "cache");
-            const publishDir = path.join("tests", "AllOk", "dist");
+            const cacheDir = path.join("tests", "data", "cache");
+            const publishDir = path.join("tests", "data", "AllOk", "dist");
             const systemConfig = SystemConfig.create({CACHE_DIR: cacheDir, PUBLISH_DIR: publishDir});
             expect(systemConfig.error).toBeUndefined();
 
@@ -41,12 +41,13 @@ describe("Plugin", function ()
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths.length).toBe(0);
+            expect(actual.missingPaths).toStrictEqual([]);
         });
 
         it("'MainPageMissing' should return no error and missing-list with main.html.", async function ()
         {
-            const cacheDir = path.join("tests", "cache");
-            const publishDir = path.join("tests", "MainPageMissing", "dist");
+            const cacheDir = path.join("tests", "data", "cache");
+            const publishDir = path.join("tests", "data", "MainPageMissing", "dist");
             const systemConfig = SystemConfig.create({CACHE_DIR: cacheDir, PUBLISH_DIR: publishDir});
             expect(systemConfig.error).toBeUndefined();
 
@@ -62,8 +63,8 @@ describe("Plugin", function ()
 
         it("'MainIndexPageMissing' should return no error and missing-list with index.html.", async function ()
         {
-            const cacheDir = path.join("tests", "cache");
-            const publishDir = path.join("tests", "MainIndexPageMissing", "dist");
+            const cacheDir = path.join("tests", "data", "cache");
+            const publishDir = path.join("tests", "data", "MainIndexPageMissing", "dist");
             const systemConfig = SystemConfig.create({CACHE_DIR: cacheDir, PUBLISH_DIR: publishDir});
             expect(systemConfig.error).toBeUndefined();
 
@@ -79,8 +80,8 @@ describe("Plugin", function ()
 
         it("'SubPageMissing' should return no error and missing-list with sub/sub.html.", async function ()
         {
-            const cacheDir = path.join("tests", "cache");
-            const publishDir = path.join("tests", "SubPageMissing", "dist");
+            const cacheDir = path.join("tests", "data", "cache");
+            const publishDir = path.join("tests", "data", "SubPageMissing", "dist");
             const systemConfig = SystemConfig.create({CACHE_DIR: cacheDir, PUBLISH_DIR: publishDir});
             expect(systemConfig.error).toBeUndefined();
 
@@ -96,8 +97,8 @@ describe("Plugin", function ()
 
         it("'SubIndexPageMissing' should return no error and missing-list with sub/index.html.", async function ()
         {
-            const cacheDir = path.join("tests", "cache");
-            const publishDir = path.join("tests", "SubIndexPageMissing", "dist");
+            const cacheDir = path.join("tests", "data", "cache");
+            const publishDir = path.join("tests", "data", "SubIndexPageMissing", "dist");
             const systemConfig = SystemConfig.create({CACHE_DIR: cacheDir, PUBLISH_DIR: publishDir});
             expect(systemConfig.error).toBeUndefined();
 
