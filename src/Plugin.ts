@@ -52,7 +52,7 @@ export class Plugin
             if (config.redirectConfig.redirects.length == 0)
                 return {error: undefined, missingPaths: missingShortPaths, redirectedPaths: []};
 
-            if (params.logAll) logOrange("  " + missingShortPaths.length + " paths missing.");
+            if (params.logAll) logOrange("  " + missingShortPaths.length + " paths missing (before applying redirects).");
 
             const redirectedShortPaths = [];
             const stillMissingShortPaths = [];
@@ -61,25 +61,23 @@ export class Plugin
                 let redirectFound = false;
                 for (const redirect of config.redirectConfig.redirects)
                 {
-                    let from = redirect["from"];
-                    let to = redirect["to"];
-                    //console.log("  Checking 1: " + from + " -> " + to);
+                    const shortFrom = redirect["from"];
+                    const shortTo = redirect["to"];
 
+                    let from = shortFrom;
                     if (!from.endsWith("/") && !from.endsWith("\\") && !from.endsWith(".html"))
                         from += ".html";
 
+                    let to = shortTo;
                     if (!to.endsWith("/") && !to.endsWith("\\") && !to.endsWith(".html"))
                         to += ".html";
-
-                    //console.log("  Checking 2: " + from + " -> " + to);
 
                     if ("/" + missingShortPath == from)
                     {
                         const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, to);
-                        //console.log("  Checking: " + redirectedFullPath);
                         if (fs.existsSync(redirectedFullPath))
                         {
-                            if (params.logAll) console.log("  Redirected: " + missingShortPath + " -> " + to);
+                            if (params.logAll) console.log("  Redirected: " + shortFrom + " -> " + shortTo);
                             redirectFound = true;
                             break;
                         }
