@@ -1,14 +1,14 @@
-import {Plugin} from "../src/Plugin.js";
-import path from "path";
+import {Plugin} from "../src/Plugin";
+import * as path from "path";
 
-describe("Plugin", function()
+describe("Plugin", function ()
 {
-    describe("run", function()
+    describe("run", function ()
     {
-        it("'AllOk' should return no error and empty missing-list.", async function()
+        it("'AllOk' should return no error and empty missing-list.", async function ()
         {
-            const cacheDir = path.join("test", "AllOk", "cache");
-            const publishDir = path.join("test", "AllOk", "dist");
+            const cacheDir = path.join("tests", "AllOk", "cache");
+            const publishDir = path.join("tests", "AllOk", "dist");
             const cacheKey = "MainPageAndSubPage";
 
             const actual = await Plugin.run({cacheDir: cacheDir, publishDir: publishDir, cacheKey: cacheKey});
@@ -17,10 +17,10 @@ describe("Plugin", function()
             expect(actual.missingPaths.length).toBe(0);
         });
 
-        it("'MainPageMissing' should return error and missing-list with main-page.", async function()
+        it("'MainPageMissing' should return error and missing-list with main-page.", async function ()
         {
-            const cacheDir = path.join("test", "MainPageMissing", "cache");
-            const publishDir = path.join("test", "MainPageMissing", "dist");
+            const cacheDir = path.join("tests", "MainPageMissing", "cache");
+            const publishDir = path.join("tests", "MainPageMissing", "dist");
             const cacheKey = "MainPageAndSubPage";
 
             const actual = await Plugin.run({cacheDir: cacheDir, publishDir: publishDir, cacheKey: cacheKey});
@@ -29,10 +29,10 @@ describe("Plugin", function()
             expect(actual.missingPaths).toStrictEqual(["main-page"]);
         });
 
-        it("'SubPageMissing' should return error and missing-list with sub/sub-page.", async function()
+        it("'SubPageMissing' should return error and missing-list with sub/sub-page.", async function ()
         {
-            const cacheDir = path.join("test", "SubPageMissing", "cache");
-            const publishDir = path.join("test", "SubPageMissing", "dist");
+            const cacheDir = path.join("tests", "SubPageMissing", "cache");
+            const publishDir = path.join("tests", "SubPageMissing", "dist");
             const cacheKey = "MainPageAndSubPage";
 
             const actual = await Plugin.run({cacheDir: cacheDir, publishDir: publishDir, cacheKey: cacheKey});

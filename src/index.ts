@@ -1,25 +1,29 @@
+import {Plugin} from "./Plugin";
+import {Config} from "./Config";
+
 // noinspection JSUnusedGlobalSymbols
+export const onPreBuild = (data: any) => check({data: data, complete: false});
 
-import {Plugin} from "./Plugin.js";
-import {Config} from "./Config.js";
+// noinspection JSUnusedGlobalSymbols
+export const onPostBuild = (data: any) => check({data: data, complete: true});
 
-export const onPreBuild = (data) => check({data: data, complete: false});
-export const onPostBuild = (data) => check({data: data, complete: true});
-
-async function check({data, complete})
+async function check(params: { data: any; complete: boolean; }): Promise<void>
 {
     console.log("# eggnstone-netlify-plugin-no-more-404/check: START");
 
-    const inputs = data.inputs;
-    const constants = data.constants;
-    const utils = data.utils;
+    if (!params.complete)
+        console.log("  Preflight check only.");
+
+    const inputs = params.data.inputs;
+    const constants = params.data.constants;
+    const utils = params.data.utils;
 
     const constantsCacheDir = constants.CACHE_DIR;
     const constantsPublishDir = constants.PUBLISH_DIR;
 
     const utilsBuild = utils.build;
 
-    const config = Config.create(data.inputs);
+    const config = Config.create(params.data.inputs);
     if (config.error)
     {
         utilsBuild.failBuild(config.error);

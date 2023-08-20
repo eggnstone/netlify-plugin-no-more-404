@@ -1,17 +1,17 @@
-import path from "path";
-import {Collector} from "./Collector.js";
-import Conf from "conf";
-import fs from "fs";
+import * as fs from "fs";
+import * as path from "path";
+import {Collector} from "./Collector";
+import {Store} from "./Store";
 
 export class Plugin
 {
-    static async run({cacheDir, publishDir, cacheKey})
+    static async run(params: { cacheDir: string; publishDir: string; cacheKey: string; }): Promise<{ error?: string, missingPaths: string[] }>
     {
         //console.log("# Plugin.run");
 
-        const fullPublishDir = path.join(process.cwd(), publishDir);
+        const fullPublishDir = path.join(process.cwd(), params.publishDir);
 
-        if (!cacheKey)
+        if (!params.cacheKey)
             return {error: "No cacheKey provided.", missingPaths: []};
 
         //console.log("  cacheDir:       " + cacheDir);
@@ -23,10 +23,10 @@ export class Plugin
         {
             const newCollection = await Collector.collect({startPath: fullPublishDir, currentPath: fullPublishDir});
 
-            const conf = new Conf({cwd: cacheDir, configName: "eggnstone-netlify-plugin-no-more-404"});
-            //console.log("  conf: " + JSON.stringify(conf));
+            const store = new Store({cwd: params.cacheDir, configName: "eggnstone-netlify-plugin-no-more-404"});
+            //console.log("  store: " + JSON.stringify(store));
 
-            const oldCollection = conf.get(cacheKey) || [];
+            const oldCollection = store.get(params.cacheKey) || [];
             //console.log("  oldCollection: " + JSON.stringify(oldCollection));
 
             if (!Array.isArray(oldCollection))
@@ -35,7 +35,7 @@ export class Plugin
             if (oldCollection.length === 0)
             {
                 console.log("  No data from previous run found. Saving current data.");
-                conf.set(cacheKey, newCollection);
+                store.set(params.cacheKey, newCollection);
                 //console.log("  Data saved.");
                 return {error: undefined, missingPaths: []};
             }
@@ -77,14 +77,14 @@ export class Plugin
 
             console.log("  No missing paths found. We're good to go.");
             //console.log("  No missing paths found. Saving current data.");
-            conf.set(cacheKey, newCollection);
+            store.set(params.cacheKey, newCollection);
             //console.log("  Data saved.");
 
             return {error: undefined, missingPaths: []};
         }
         catch (e)
         {
-            return {error: e, missingPaths: []};
+            return {error: `${e}`, missingPaths: []};
         }
     }
 }
