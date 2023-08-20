@@ -14,6 +14,12 @@ export class Store
 
     public read()
     {
+        if (!fs.existsSync(this.fullPath))
+        {
+            this.data = {};
+            return;
+        }
+
         this.data = JSON.parse(fs.readFileSync(this.fullPath, "utf-8"));
         if (!this.data)
             throw new Error("Error while trying to read data from file: " + this.fullPath);

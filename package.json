@@ -29,5 +29,5 @@
         "test": "jest --config jestconfig.json"
     },
     "types": "lib/index.d.ts",
-    "version": "1.0.10"
+    "version": "1.0.11"
 }
