@@ -11,7 +11,7 @@ import {Config} from "./Config";
 
     const cacheDir = path.join("..", "..", ".netlify", "cache");
     const publishDir = path.join("..", "..", "dist");
-    const systemConfig = SystemConfig.create({CACHE_DIR: cacheDir, PUBLISH_DIR: publishDir});
+    const systemConfig = SystemConfig.create({CACHE_DIR: cacheDir, PUBLISH_DIR: publishDir}, true);
     if (systemConfig.error)
     {
         console.error(systemConfig.error);
@@ -19,18 +19,18 @@ import {Config} from "./Config";
     }
 
     const cacheKey = "CACHE_KEY";
-    const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey});
+    const userConfig = UserConfig.create({on404: "error", cacheKey: cacheKey}, true);
     if (userConfig.error)
     {
         console.error(userConfig.error);
         return;
     }
 
-    const redirectConfig = RedirectConfig.create({});
+    const redirectConfig = RedirectConfig.create([]);
     expect(redirectConfig.error).toBeUndefined();
 
     const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
-    const result = await Plugin.run(config);
+    const result = await Plugin.run(config, {logAll: true, write: true});
     if (result)
         console.error(result);
 

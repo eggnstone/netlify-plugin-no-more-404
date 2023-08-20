@@ -1,21 +1,25 @@
 export class UserConfig
 {
     public readonly error?: string;
-    public readonly on404: string;
+
     public readonly cacheKey: string;
+    public readonly debug2: boolean;
+    public readonly on404: string;
 
     private constructor(params: {
         error?: string,
-        on404?: string,
-        cacheKey?: string
+        cacheKey?: string,
+        debug?: boolean,
+        on404?: string
     })
     {
         this.error = params.error;
         this.on404 = params.on404 == "warn" ? "warn" : "error";
         this.cacheKey = params.cacheKey ?? "";
+        this.debug2 = params.debug ?? true;
     }
 
-    public static create(inputs: any): UserConfig
+    public static create(inputs: any, logAll: boolean): UserConfig
     {
         if (!inputs)
             return new UserConfig({error: "inputs not set."});
@@ -25,11 +29,16 @@ export class UserConfig
 
         const cacheKeys = inputs["cacheKeys"];
         const environmentVariableName = inputs["environmentVariableName"];
+        const debug = inputs["debug"] ?? true;
 
-        console.log("    on404:          " + on404);
-        console.log("    cacheKey:       " + cacheKey);
-        console.log("    cacheKeys:      " + JSON.stringify(cacheKeys));
-        console.log("    envVarName:     " + environmentVariableName);
+        if (logAll)
+        {
+            console.log("    on404:          " + on404);
+            console.log("    cacheKey:       " + cacheKey);
+            console.log("    cacheKeys:      " + JSON.stringify(cacheKeys));
+            console.log("    envVarName:     " + environmentVariableName);
+            //console.log("    debug:          " + debug);
+        }
 
         if (on404 != "warn" && on404 != "error")
             return new UserConfig({error: "on404 must be \"error\" or \"warn\"."});
@@ -37,7 +46,7 @@ export class UserConfig
         if (cacheKey)
         {
             if (environmentVariableName || cacheKeys)
-                console.log("  cacheKey set. Ignoring environmentVariableName and cacheKeys.");
+                if (logAll) console.log("  cacheKey set. Ignoring environmentVariableName and cacheKeys.");
         }
         else
         {
@@ -61,9 +70,9 @@ export class UserConfig
             if (!cacheKey)
                 new UserConfig({error: "No cache key found for \"" + environmentVariableValue + "\" in " + JSON.stringify(cacheKeys) + ".", on404: on404});
 
-            console.log("    Final cacheKey: " + cacheKey);
+            if (logAll) console.log("    Final cacheKey: " + cacheKey);
         }
 
-        return new UserConfig({on404: on404, cacheKey: cacheKey});
+        return new UserConfig({on404: on404, cacheKey: cacheKey, debug: debug});
     }
 }

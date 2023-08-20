@@ -22,7 +22,7 @@ export class Checker
         // noinspection JSUnresolvedReference
         const utilsBuild = params.data.utils.build;
 
-        const systemConfig = SystemConfig.create(params.data.constants);
+        const systemConfig = SystemConfig.create(params.data.constants, true);
         if (systemConfig.error)
         {
             // noinspection JSUnresolvedReference
@@ -30,7 +30,7 @@ export class Checker
             return;
         }
 
-        const userConfig = UserConfig.create(params.data.inputs);
+        const userConfig = UserConfig.create(params.data.inputs, true);
         if (userConfig.error)
         {
             // noinspection JSUnresolvedReference
@@ -56,13 +56,13 @@ export class Checker
         }
 
         const config = new Config({systemConfig: systemConfig, userConfig: userConfig, redirectConfig: redirectConfig});
-        const result = await Plugin.run(config);
+        const result = await Plugin.run(config, {logAll: true, write: true});
 
         let error;
         if (result.error)
             error = result.error;
         else if (result.missingPaths.length > 0)
-            error = result.missingPaths.length + " missing paths found.";
+            error = result.missingPaths.length + " paths missing.";
 
         if (error)
             logError("  " + error);

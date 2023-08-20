@@ -4,7 +4,7 @@ describe("userConfig", function ()
 {
     it("Undefined inputs should return an error.", function ()
     {
-        const userConfig = UserConfig.create(undefined);
+        const userConfig = UserConfig.create(undefined, false);
 
         expect(userConfig.error).toBe("inputs not set.");
     });
@@ -13,7 +13,7 @@ describe("userConfig", function ()
     {
         const inputs = {};
 
-        const userConfig = UserConfig.create(inputs);
+        const userConfig = UserConfig.create(inputs, false);
 
         expect(userConfig.error).toBe("on404 must be \"error\" or \"warn\".");
     });
@@ -22,7 +22,7 @@ describe("userConfig", function ()
     {
         const inputs = {on404: "error"};
 
-        const userConfig = UserConfig.create(inputs);
+        const userConfig = UserConfig.create(inputs, false);
 
         expect(userConfig.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
     });
@@ -31,7 +31,7 @@ describe("userConfig", function ()
     {
         const inputs = {on404: "error", cacheKey: "SomeCacheKey"};
 
-        const userConfig = UserConfig.create(inputs);
+        const userConfig = UserConfig.create(inputs, false);
 
         expect(userConfig.error).toBeUndefined();
     });
@@ -40,7 +40,7 @@ describe("userConfig", function ()
     {
         const inputs = {on404: "error", environmentVariableName: "SomeVariableName"};
 
-        const userConfig = UserConfig.create(inputs);
+        const userConfig = UserConfig.create(inputs, false);
 
         expect(userConfig.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
     });
@@ -49,7 +49,7 @@ describe("userConfig", function ()
     {
         const inputs = {on404: "error", cacheKeys: []};
 
-        const userConfig = UserConfig.create(inputs);
+        const userConfig = UserConfig.create(inputs, false);
 
         expect(userConfig.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
     });
@@ -58,7 +58,7 @@ describe("userConfig", function ()
     {
         const inputs = {on404: "error", environmentVariableName: "SomeVariableName", cacheKeys: []};
 
-        const userConfig = UserConfig.create(inputs);
+        const userConfig = UserConfig.create(inputs, false);
 
         expect(userConfig.error).toBe("Environment variable \"SomeVariableName\" not set.");
     });

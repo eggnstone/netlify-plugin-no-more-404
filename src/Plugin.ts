@@ -7,7 +7,7 @@ import {Config} from "./Config";
 
 export class Plugin
 {
-    static async run(config: Config): Promise<{ error?: string, missingPaths: string[] }>
+    static async run(config: Config, params: { logAll: boolean, write: boolean }): Promise<{ error?: string, missingPaths: string[] }>
     {
         try
         {
@@ -22,37 +22,81 @@ export class Plugin
 
             if (!oldCollection)
             {
-                logGreen("  No data from previous run found. Saving current data.");
-                store.setAndWrite(config.userConfig.cacheKey, newCollection);
-                //console.log("  Data saved.");
+                if (params.logAll) logGreen("  No data from previous run found. Saving current data.");
+                if (params.write)
+                    store.setAndWrite(config.userConfig.cacheKey, newCollection);
+
                 return {error: undefined, missingPaths: []};
             }
 
-            console.log("  Data from previous run found. Comparing with current data.");
-            const missingPaths = [];
+            if (params.logAll) console.log("  Data from previous run found. Comparing with current data.");
+            const missingShortPaths = [];
             for (let oldShortPath of oldCollection)
             {
                 const oldFullPath = path.join(config.systemConfig.fullPublishDir, oldShortPath);
                 if (!fs.existsSync(oldFullPath))
                 {
-                    logRed("  Missing: " + oldShortPath);
-                    missingPaths.push(oldShortPath);
+                    if (params.logAll) logRed("  Missing: " + oldShortPath);
+                    missingShortPaths.push(oldShortPath);
                 }
             }
 
-            if (missingPaths.length > 0)
-                return {error: undefined, missingPaths: missingPaths};
+            if (missingShortPaths.length == 0)
+            {
+                if (params.logAll) logGreen("  No paths missing. We're good to go.");
+                if (params.write)
+                    store.setAndWrite(config.userConfig.cacheKey, newCollection);
 
-            logGreen("  No missing paths found. We're good to go.");
-            //console.log("  No missing paths found. Saving current data.");
-            store.setAndWrite(config.userConfig.cacheKey, newCollection);
-            //console.log("  Data saved.");
+                return {error: undefined, missingPaths: []};
+            }
 
-            return {error: undefined, missingPaths: []};
+            if (config.redirectConfig.redirects.length == 0)
+                return {error: undefined, missingPaths: missingShortPaths};
+
+            if (params.logAll) logRed("  " + missingShortPaths.length + " paths missing.");
+
+            const stillMissingShortPaths = [];
+            //for (let missingShortPathIndex = missingShortPaths.length - 1; missingShortPathIndex >= 0; missingShortPathIndex--)
+            for (const missingShortPath of missingShortPaths)
+            {
+                let redirectFound = false;
+                for (const redirect of config.redirectConfig.redirects)
+                {
+                    const from = redirect["from"];
+                    const to = redirect["to"];
+                    console.log("Testing redirect: " + from + " -> " + to + " for missing path: " + missingShortPath);
+                    if (missingShortPath == from)
+                    {
+                        const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, to);
+                        if (fs.existsSync(redirectedFullPath))
+                        {
+                            if (params.logAll) console.log("  Redirected: " + missingShortPath + " -> " + to);
+                            redirectFound = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!redirectFound)
+                    stillMissingShortPaths.push(missingShortPath);
+            }
+
+            if (stillMissingShortPaths.length == 0)
+            {
+                if (params.logAll) logGreen("  No paths missing (after applying redirects). We're good to go.");
+                if (params.write)
+                    store.setAndWrite(config.userConfig.cacheKey, newCollection);
+
+                return {error: undefined, missingPaths: []};
+            }
+
+            if (params.logAll) logRed("  " + stillMissingShortPaths.length + " paths missing (even after applying redirects).");
+
+            return {error: undefined, missingPaths: missingShortPaths};
         }
         catch (e)
         {
-            console.error(e);
+            if (params.logAll) console.error(e);
             return {error: `${e}`, missingPaths: []};
         }
     }

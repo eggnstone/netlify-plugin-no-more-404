@@ -17,7 +17,7 @@ export class SystemConfig
         this.fullPublishDir = params.fullPublishDir;
     }
 
-    public static create(constants: any): SystemConfig
+    public static create(constants: any, logAll: boolean): SystemConfig
     {
         if (!constants)
             return new SystemConfig({error: "constants not set.", fullCacheDir: "", fullPublishDir: ""});
@@ -31,12 +31,15 @@ export class SystemConfig
             return new SystemConfig({error: "publishDir not set.", fullCacheDir: "", fullPublishDir: ""});
 
         const fullCacheDir = cacheDir.startsWith("/") ? cacheDir : path.join(process.cwd(), cacheDir);
-        console.log("    cacheDir:       " + cacheDir);
-        console.log("    fullCacheDir:   " + fullCacheDir);
-
         const fullPublishDir = path.join(process.cwd(), publishDir);
-        console.log("    publishDir:     " + publishDir);
-        console.log("    fullPublishDir: " + fullPublishDir);
+
+        if (logAll)
+        {
+            console.log("    cacheDir:       " + cacheDir);
+            console.log("    fullCacheDir:   " + fullCacheDir);
+            console.log("    publishDir:     " + publishDir);
+            console.log("    fullPublishDir: " + fullPublishDir);
+        }
 
         return new SystemConfig({fullCacheDir: fullCacheDir, fullPublishDir: fullPublishDir});
     }
