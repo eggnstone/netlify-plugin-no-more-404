@@ -1,5 +1,6 @@
 import * as colors from "colors/safe";
 
+// noinspection JSUnusedGlobalSymbols
 export function logDemo()
 {
     logDebug("Debug");
@@ -40,12 +41,6 @@ export function logRed(s: string)
 export function logGreen(s: string)
 {
     console.log(colors.green(s));
-}
-
-export function logGreen2(s: string)
-{
-    // Green doesn't behave properly. It doesn't seem to print a newline.
-    console.log(colors.green(s) + " ");
 }
 
 export function logBlue(s: string)
