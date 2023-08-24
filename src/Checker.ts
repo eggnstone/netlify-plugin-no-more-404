@@ -1,7 +1,7 @@
 import {Plugin} from "./Plugin";
 import {UserConfig} from "./UserConfig";
 import {SystemConfig} from "./SystemConfig";
-import {logBlue, logError, logGreen} from "./Log";
+import {logBlue, logDemo, logError, logGreen, logGreen2} from "./Log";
 import {RedirectConfig} from "./RedirectConfig";
 import {Config} from "./Config";
 
@@ -44,11 +44,20 @@ export class Checker
             return;
         }
 
+        logDemo();
+
+        logGreen("  green without newline");
+        console.log("  green without newline");
+        logGreen("  green with newline\n");
+        console.log("  green with newline");
+        logGreen2("  green2 without newline");
+        console.log("  green2 without newline");
+        logGreen2("  green2 with newline\n");
+        console.log("  green2 with newline");
+
         if (!params.complete)
         {
             logGreen("  Preflight check OK. We're good to go.");
-            logGreen("  Preflight check OK. We're good to go.");
-            logBlue("# eggnstone-netlify-plugin-no-more-404 END");
             logBlue("# eggnstone-netlify-plugin-no-more-404 END");
             return;
         }
@@ -67,7 +76,6 @@ export class Checker
             error = result.missingPaths.length + " paths missing.";
         }
 
-        logBlue("# eggnstone-netlify-plugin-no-more-404 END");
         logBlue("# eggnstone-netlify-plugin-no-more-404 END");
 
         if (!error)
