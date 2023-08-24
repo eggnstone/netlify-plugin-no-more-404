@@ -72,6 +72,7 @@ export class Plugin
                     if (!to.endsWith("/") && !to.endsWith("\\") && !to.endsWith(".html"))
                         to += ".html";
 
+                    // TODO: * and :splat
                     if ("/" + missingShortPath == from)
                     {
                         const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, to);
@@ -80,6 +81,11 @@ export class Plugin
                             if (params.logAll) console.log("  Redirected: " + shortFrom + " -> " + shortTo);
                             redirectFound = true;
                             break;
+                        }
+                        else
+                        {
+                            // TODO: check redirect
+                            // TODO: circular redirect
                         }
                     }
                 }

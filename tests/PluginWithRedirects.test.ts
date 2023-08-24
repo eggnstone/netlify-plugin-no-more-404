@@ -17,7 +17,7 @@ describe("Plugin", function ()
             expect(systemConfig.error).toBeUndefined();
 
             const cacheKey = "MainPageAndSubPage";
-            const userConfig = UserConfig.create({on404: "error", cacheKey}, false);
+            const userConfig = UserConfig.create({failBuildOnError: true, cacheKey}, false);
             expect(userConfig.error).toBeUndefined();
 
             const redirectConfig = RedirectConfig.create([{"from": "/main.html", "to": "/main2.html"}]);

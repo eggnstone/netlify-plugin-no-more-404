@@ -9,18 +9,18 @@ describe("userConfig", function ()
         expect(userConfig.error).toBe("inputs not set.");
     });
 
-    it("Missing on404 should return an error.", function ()
+    it("Missing failBuildOnError should return an error.", function ()
     {
         const inputs = {};
 
         const userConfig = UserConfig.create(inputs, false);
 
-        expect(userConfig.error).toBe("on404 must be \"error\" or \"warn\".");
+        expect(userConfig.error).toBe("failBuildOnError must be true or false.");
     });
 
     it("Missing cacheKey should an error.", function ()
     {
-        const inputs = {on404: "error"};
+        const inputs = {failBuildOnError: true};
 
         const userConfig = UserConfig.create(inputs, false);
 
@@ -29,7 +29,7 @@ describe("userConfig", function ()
 
     it("Using cacheKey should return no error.", function ()
     {
-        const inputs = {on404: "error", cacheKey: "SomeCacheKey"};
+        const inputs = {failBuildOnError: true, cacheKey: "SomeCacheKey"};
 
         const userConfig = UserConfig.create(inputs, false);
 
@@ -38,7 +38,7 @@ describe("userConfig", function ()
 
     it("Using environmentVariableName without cacheKeys should return an error.", function ()
     {
-        const inputs = {on404: "error", environmentVariableName: "SomeVariableName"};
+        const inputs = {failBuildOnError: true, environmentVariableName: "SomeVariableName"};
 
         const userConfig = UserConfig.create(inputs, false);
 
@@ -47,7 +47,7 @@ describe("userConfig", function ()
 
     it("Using cacheKeys without environmentVariableName should return an error.", function ()
     {
-        const inputs = {on404: "error", cacheKeys: []};
+        const inputs = {failBuildOnError: true, cacheKeys: []};
 
         const userConfig = UserConfig.create(inputs, false);
 
@@ -56,7 +56,7 @@ describe("userConfig", function ()
 
     it("using an unset environmentVariable should return an error.", function ()
     {
-        const inputs = {on404: "error", environmentVariableName: "SomeVariableName", cacheKeys: []};
+        const inputs = {failBuildOnError: true, environmentVariableName: "SomeVariableName", cacheKeys: []};
 
         const userConfig = UserConfig.create(inputs, false);
 

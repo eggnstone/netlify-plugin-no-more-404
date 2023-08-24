@@ -68,19 +68,20 @@ export class Checker
         }
 
         logBlue("# eggnstone-netlify-plugin-no-more-404 END");
+        logBlue("# eggnstone-netlify-plugin-no-more-404 END");
 
         if (!error)
             return
 
-        if (userConfig.on404 === "warn")
+        if (userConfig.failBuildOnError)
         {
             // noinspection JSUnresolvedReference
-            utilsBuild.failPlugin(error);
+            utilsBuild.failBuild(error);
         }
         else
         {
             // noinspection JSUnresolvedReference
-            utilsBuild.failBuild(error);
+            utilsBuild.failPlugin(error);
         }
     }
 }

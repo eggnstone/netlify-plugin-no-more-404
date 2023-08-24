@@ -1,8 +1,8 @@
 name: eggnstone-netlify-plugin-no-more-404
 inputs:
-  - name: on404
-    description: "Behavior when 404 found: 'error' aborts build. 'warn' only warns."
-    default: "error"
+  - name: failBuildOnError
+    description: "Behavior when 404 is found: abort the build or not."
+    default: true
   - name: cacheKey
     description: "Name of cache key to use (e.g. 'CacheKey_1'). Choose a new name (e.g. 'CacheKey_2') to invalidate the cache."
     default: ""
@@ -12,3 +12,6 @@ inputs:
   - name: cacheKeys
     description: "List of cache keys to use (e.g. ['TargetA_1', 'TargetB_2']). (When using multiple targets only. Will be ignored when cacheKey is set.)"
     default: []
+  - name: debug
+    description: "Not used yet."
+    default: false
