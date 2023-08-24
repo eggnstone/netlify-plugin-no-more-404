@@ -46,14 +46,8 @@ export class Checker
 
         if (!params.complete)
         {
-            logGreen("  Preflight check OK. We're good to go.");
+            logGreen("  Preflight check OK. We're good to go.\n"); // Somehow we need a newline here or otherwise it is not shown in the Netlify build log.
             logBlue("# eggnstone-netlify-plugin-no-more-404 END");
-            logGreen("  Preflight check OK. We're good to go.");
-            logBlue("#eggnstone-netlify-plugin-no-more-404 END");
-            logGreen("  Preflight check OK. We're good to go.");
-            logBlue(" eggnstone-netlify-plugin-no-more-404 END");
-            logGreen("  Preflight check OK. We're good to go.");
-            logBlue("eggnstone-netlify-plugin-no-more-404 END");
             return;
         }
 
