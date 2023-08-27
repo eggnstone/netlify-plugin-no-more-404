@@ -33,10 +33,14 @@ export class UserConfig
 
         if (logAll)
         {
-            console.log("    failBuildOnError: " + failBuildOnError);
-            console.log("    cacheKey:         " + cacheKey);
-            console.log("    cacheKeys:        " + JSON.stringify(cacheKeys));
-            console.log("    envVarName:       " + environmentVariableName);
+            const failBuildOnErrorText = failBuildOnError === undefined ? "undefined" : failBuildOnError;
+            const cacheKeyText = cacheKey === undefined ? "undefined" : '"' + cacheKey + '"';
+            const cacheKeysText = (Array.isArray(cacheKeys) ? cacheKeys.length : "no") + " items";
+            const envVarNameText = environmentVariableName === undefined ? "undefined" : '"' + environmentVariableName + '"';
+            console.log("    failBuildOnError: " + failBuildOnErrorText);
+            console.log("    cacheKey:         " + cacheKeyText);
+            console.log("    cacheKeys:        " + cacheKeysText);
+            console.log("    envVarName:       " + envVarNameText);
             //console.log("    debug:            " + debug);
         }
 

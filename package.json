@@ -6,7 +6,7 @@
     "description": "Simple replacement for the Netlify plugin `netlify-plugin-no-more-404`",
     "devDependencies": {
         "@types/jest": "^29.5.4",
-        "jest": "^29.6.3",
+        "jest": "^29.6.4",
         "ts-jest": "^29.1.1"
     },
     "directories": {
@@ -29,5 +29,5 @@
         "test": "jest --config jestconfig.json"
     },
     "types": "lib/index.d.ts",
-    "version": "1.0.20"
+    "version": "1.0.21"
 }
