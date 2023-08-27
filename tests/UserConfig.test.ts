@@ -1,65 +1,78 @@
 import {UserConfig} from "../src/UserConfig";
+import * as assert from "assert";
+import 'jest-expect-message';
 
 describe("userConfig", function ()
 {
     it("Undefined inputs should return an error.", function ()
     {
-        const userConfig = UserConfig.create(undefined, false);
+        const actual = UserConfig.create(undefined, false);
 
-        expect(userConfig.error).toBe("inputs not set.");
+        expect(actual.error).toBe("inputs not set.");
     });
 
     it("Missing failBuildOnError should return an error.", function ()
     {
         const inputs = {};
 
-        const userConfig = UserConfig.create(inputs, false);
+        const actual = UserConfig.create(inputs, false);
 
-        expect(userConfig.error).toBe("failBuildOnError must be true or false.");
+        expect(actual.error).toBe("failBuildOnError must be true or false.");
     });
 
     it("Missing cacheKey should an error.", function ()
     {
         const inputs = {failBuildOnError: true};
 
-        const userConfig = UserConfig.create(inputs, false);
+        const actual = UserConfig.create(inputs, false);
 
-        expect(userConfig.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
+        expect(actual.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
     });
 
     it("Using cacheKey should return no error.", function ()
     {
         const inputs = {failBuildOnError: true, cacheKey: "SomeCacheKey"};
 
-        const userConfig = UserConfig.create(inputs, false);
+        const actual = UserConfig.create(inputs, false);
 
-        expect(userConfig.error).toBeUndefined();
+        expect(actual.error).toBeUndefined();
     });
 
     it("Using environmentVariableName without cacheKeys should return an error.", function ()
     {
         const inputs = {failBuildOnError: true, environmentVariableName: "SomeVariableName"};
 
-        const userConfig = UserConfig.create(inputs, false);
+        const actual = UserConfig.create(inputs, false);
 
-        expect(userConfig.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
+        expect(actual.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
     });
 
     it("Using cacheKeys without environmentVariableName should return an error.", function ()
     {
         const inputs = {failBuildOnError: true, cacheKeys: []};
 
-        const userConfig = UserConfig.create(inputs, false);
+        const actual = UserConfig.create(inputs, false);
 
-        expect(userConfig.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
+        expect(actual.error).toBe("cacheKey not set, then cacheKeys and environmentVariableName must be set.");
     });
 
     it("using an unset environmentVariable should return an error.", function ()
     {
         const inputs = {failBuildOnError: true, environmentVariableName: "SomeVariableName", cacheKeys: []};
 
-        const userConfig = UserConfig.create(inputs, false);
+        const actual = UserConfig.create(inputs, false);
 
-        expect(userConfig.error).toBe("Environment variable \"SomeVariableName\" not set.");
+        expect(actual.error).toBe('Environment variable "SomeVariableName" not set.');
+    });
+
+    it("using a set environmentVariable which does not match any of the cacheKeys should return an error.", function ()
+    {
+        const inputs = {failBuildOnError: true, environmentVariableName: "ComputerName", cacheKeys: []};
+
+        const actual = UserConfig.create(inputs, false);
+
+        assert(actual.error);
+        expect(actual.error.startsWith('No cache key found for "'), 'Is: "' + actual.error + '"').toBeTruthy();
+        expect(actual.error.endsWith('" in [].'), 'Is: "' + actual.error + '"').toBeTruthy();
     });
 });

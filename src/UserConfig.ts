@@ -35,7 +35,7 @@ export class UserConfig
         {
             const failBuildOnErrorText = failBuildOnError === undefined ? "<undefined>" : failBuildOnError;
             const cacheKeyText = cacheKey === undefined ? "<undefined>" : cacheKey.length == 0 ? "<empty>" : '"' + cacheKey + '"';
-            const cacheKeysText = (Array.isArray(cacheKeys) ? cacheKeys.length : "no") + " items";
+            const cacheKeysText = Array.isArray(cacheKeys) ? cacheKeys.length == 1 ? "1 item" : cacheKeys.length + " items" : "no itmes";
             const envVarNameText = environmentVariableName === undefined ? "<undefined>" : environmentVariableName.length == 0 ? "<empty>" : '"' + environmentVariableName + '"';
             console.log("    failBuildOnError: " + failBuildOnErrorText);
             console.log("    cacheKey:         " + cacheKeyText);
@@ -59,7 +59,7 @@ export class UserConfig
 
             const environmentVariableValue = process.env[environmentVariableName];
             if (!environmentVariableValue)
-                return new UserConfig({error: "Environment variable \"" + environmentVariableName + "\" not set.", failBuildOnError});
+                return new UserConfig({error: 'Environment variable "' + environmentVariableName + '" not set.', failBuildOnError});
 
             let key;
             for (key of cacheKeys)
@@ -72,9 +72,9 @@ export class UserConfig
             }
 
             if (!cacheKey)
-                new UserConfig({error: "No cache key found for \"" + environmentVariableValue + "\" in " + JSON.stringify(cacheKeys) + ".", failBuildOnError});
+                return new UserConfig({error: 'No cache key found for "' + environmentVariableValue + '" in ' + JSON.stringify(cacheKeys) + ".", failBuildOnError});
 
-            if (logAll) console.log("    Final cacheKey:   " + cacheKey);
+            if (logAll) console.log('    Final cacheKey:   "' + cacheKey + '"');
         }
 
         return new UserConfig({failBuildOnError, cacheKey, debug});

@@ -1,7 +1,17 @@
 {
+    "moduleFileExtensions": [
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "node"
+    ],
+    "setupFilesAfterEnv": [
+        "jest-expect-message"
+    ],
+    "testRegex": "(/tests/.*.test.ts)$",
     "transform": {
         "^.+\\.(t|j)sx?$": "ts-jest"
-    },
-    "testRegex": "(/tests/.*.test.ts)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+    }
 }
