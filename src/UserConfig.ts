@@ -33,10 +33,10 @@ export class UserConfig
 
         if (logAll)
         {
-            const failBuildOnErrorText = failBuildOnError === undefined ? "undefined" : failBuildOnError;
-            const cacheKeyText = cacheKey === undefined ? "undefined" : '"' + cacheKey + '"';
+            const failBuildOnErrorText = failBuildOnError === undefined ? "<undefined>" : failBuildOnError;
+            const cacheKeyText = cacheKey === undefined ? "<undefined>" : cacheKey.length == 0 ? "<empty>" : '"' + cacheKey + '"';
             const cacheKeysText = (Array.isArray(cacheKeys) ? cacheKeys.length : "no") + " items";
-            const envVarNameText = environmentVariableName === undefined ? "undefined" : '"' + environmentVariableName + '"';
+            const envVarNameText = environmentVariableName === undefined ? "<undefined>" : environmentVariableName.length == 0 ? "<empty>" : '"' + environmentVariableName + '"';
             console.log("    failBuildOnError: " + failBuildOnErrorText);
             console.log("    cacheKey:         " + cacheKeyText);
             console.log("    cacheKeys:        " + cacheKeysText);
@@ -74,7 +74,7 @@ export class UserConfig
             if (!cacheKey)
                 new UserConfig({error: "No cache key found for \"" + environmentVariableValue + "\" in " + JSON.stringify(cacheKeys) + ".", failBuildOnError});
 
-            if (logAll) console.log("    Final cacheKey: " + cacheKey);
+            if (logAll) console.log("    Final cacheKey:   " + cacheKey);
         }
 
         return new UserConfig({failBuildOnError, cacheKey, debug});
