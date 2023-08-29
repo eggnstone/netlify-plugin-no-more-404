@@ -54,25 +54,35 @@ export class Plugin
 
             if (params.logAll) logOrange("  " + missingShortPaths.length + " paths missing (before applying redirects).");
 
+            /*
             for (const redirect of config.redirectConfig.redirects)
             {
                 const shortFrom = redirect["from"];
                 const shortTo = redirect["to"];
                 if (shortFrom.indexOf("*") >= 0)
-                    console.log("    Rule with * not handled yet: " + shortFrom + " -> " + shortTo);
+                {
+                    if (params.logAll) console.log("    Rule with * not handled yet: " + shortFrom + " -> " + shortTo);
+                }
                 else if (shortFrom.indexOf(":") >= 0)
-                    console.log("    Rule with : not handled yet: " + shortFrom + " -> " + shortTo);
+                {
+                    if (params.logAll) console.log("    Rule with : not handled yet: " + shortFrom + " -> " + shortTo);
+                }
                 else
-                    console.log("    Rule is OK:                  " + shortFrom + " -> " + shortTo);
+                {
+                    if (params.logAll) console.log("    Rule is OK:                  " + shortFrom + " -> " + shortTo);
+                }
             }
+            */
 
             const redirectedShortPaths = [];
             const stillMissingShortPaths = [];
             for (const missingShortPath of missingShortPaths)
             {
-                console.log("    missingShortPath:             " + missingShortPath);
+                //if (params.logAll) console.log("    missingShortPath:   " + missingShortPath);
+
                 const missingShortPathNormalized = missingShortPath.replace(/\\/g, "/");
-                console.log("      missingShortPathNormalized: " + missingShortPathNormalized);
+                if (params.logAll) console.log("    Missing:            /" + missingShortPathNormalized);
+
                 let redirectFound = false;
                 for (const redirect of config.redirectConfig.redirects)
                 {
@@ -92,24 +102,29 @@ export class Plugin
                     if (toLong.endsWith("/"))
                         toLong += "index.html";
 
-                    console.log("      fromShort:                  " + fromShort);
-                    console.log("      fromLong:                   " + fromLong);
-                    console.log("      toShort:                    " + toShort);
-                    console.log("      toLong:                     " + toLong);
+                    /*
+                    if (params.logAll)
+                    {
+                        console.log("      fromShort:        " + fromShort);
+                        console.log("      fromLong:         " + fromLong);
+                        console.log("      toShort:          " + toShort);
+                        console.log("      toLong:           " + toLong);
+                    }
+                    */
 
                     // TODO: * and :splat
                     if ("/" + missingShortPathNormalized == fromLong)
                     {
                         const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, toLong);
-                        console.log("      Testing:                    " + redirectedFullPath);
+                        //if (params.logAll) console.log("      Testing:          " + redirectedFullPath);
                         if (fs.existsSync(redirectedFullPath))
                         {
-                            if (params.logAll) console.log("      Redirection OK:             " + fromShort + " -> " + toShort);
+                            if (params.logAll) console.log("      Redirection OK:   " + toLong);
                             redirectFound = true;
                             break;
                         }
 
-                        if (params.logAll) console.log("      Redirection failed:         " + fromShort + " -> " + toShort);
+                        if (params.logAll) console.log("      Target not found: " + toLong);
                         // TODO: check redirect
                         // TODO: circular redirect
                     }
@@ -117,12 +132,11 @@ export class Plugin
 
                 if (redirectFound)
                 {
-                    if (params.logAll) console.log("      Redirection OK:             " + missingShortPath);
                     redirectedShortPaths.push(missingShortPath);
                 }
                 else
                 {
-                    if (params.logAll) console.log("      Redirection failed:         " + missingShortPath);
+                    if (params.logAll) console.log("      No working redirection found.");
                     stillMissingShortPaths.push(missingShortPath);
                 }
             }
