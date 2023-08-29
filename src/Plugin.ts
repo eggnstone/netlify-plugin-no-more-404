@@ -54,46 +54,77 @@ export class Plugin
 
             if (params.logAll) logOrange("  " + missingShortPaths.length + " paths missing (before applying redirects).");
 
+            for (const redirect of config.redirectConfig.redirects)
+            {
+                const shortFrom = redirect["from"];
+                const shortTo = redirect["to"];
+                if (shortFrom.indexOf("*") >= 0)
+                    console.log("    Rule with * not handled yet: " + shortFrom + " -> " + shortTo);
+                else if (shortFrom.indexOf(":") >= 0)
+                    console.log("    Rule with : not handled yet: " + shortFrom + " -> " + shortTo);
+                else
+                    console.log("    Rule is OK:                  " + shortFrom + " -> " + shortTo);
+            }
+
             const redirectedShortPaths = [];
             const stillMissingShortPaths = [];
             for (const missingShortPath of missingShortPaths)
             {
+                console.log("    missingShortPath:             " + missingShortPath);
+                const missingShortPathNormalized = missingShortPath.replace(/\\/g, "/");
+                console.log("      missingShortPathNormalized: " + missingShortPathNormalized);
                 let redirectFound = false;
                 for (const redirect of config.redirectConfig.redirects)
                 {
-                    const shortFrom = redirect["from"];
-                    const shortTo = redirect["to"];
+                    const fromShort = redirect["from"];
+                    const toShort = redirect["to"];
 
-                    let from = shortFrom;
-                    if (!from.endsWith("/") && !from.endsWith("\\") && !from.endsWith(".html"))
-                        from += ".html";
+                    if (fromShort.indexOf("*") >= 0 || fromShort.indexOf(":") >= 0)
+                        continue;
 
-                    let to = shortTo;
-                    if (!to.endsWith("/") && !to.endsWith("\\") && !to.endsWith(".html"))
-                        to += ".html";
+                    let fromLong = fromShort;
+                    //if (!fromLong.endsWith("/") && !fromLong.endsWith("\\") && !fromLong.endsWith(".html"))
+                    if (fromLong.endsWith("/"))
+                        fromLong += "index.html";
+
+                    let toLong = toShort;
+                    //if (!toLong.endsWith("/") && !toLong.endsWith("\\") && !toLong.endsWith(".html"))
+                    if (toLong.endsWith("/"))
+                        toLong += "index.html";
+
+                    console.log("      fromShort:                  " + fromShort);
+                    console.log("      fromLong:                   " + fromLong);
+                    console.log("      toShort:                    " + toShort);
+                    console.log("      toLong:                     " + toLong);
 
                     // TODO: * and :splat
-                    if ("/" + missingShortPath == from)
+                    if ("/" + missingShortPathNormalized == fromLong)
                     {
-                        const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, to);
+                        const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, toLong);
+                        console.log("      Testing:                    " + redirectedFullPath);
                         if (fs.existsSync(redirectedFullPath))
                         {
-                            if (params.logAll) console.log("  Redirected: " + shortFrom + " -> " + shortTo);
+                            if (params.logAll) console.log("      Redirection OK:             " + fromShort + " -> " + toShort);
                             redirectFound = true;
                             break;
                         }
-                        else
-                        {
-                            // TODO: check redirect
-                            // TODO: circular redirect
-                        }
+
+                        if (params.logAll) console.log("      Redirection failed:         " + fromShort + " -> " + toShort);
+                        // TODO: check redirect
+                        // TODO: circular redirect
                     }
                 }
 
                 if (redirectFound)
+                {
+                    if (params.logAll) console.log("      Redirection OK:             " + missingShortPath);
                     redirectedShortPaths.push(missingShortPath);
+                }
                 else
+                {
+                    if (params.logAll) console.log("      Redirection failed:         " + missingShortPath);
                     stillMissingShortPaths.push(missingShortPath);
+                }
             }
 
             if (stillMissingShortPaths.length == 0)
