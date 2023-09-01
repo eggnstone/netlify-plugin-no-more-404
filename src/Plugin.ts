@@ -66,7 +66,7 @@ export class Plugin
                 {
                     if (params.logAll) console.log('    Rule with : in "from" not handled yet: ' + shortFrom + " -> " + shortTo);
                 }
-                else if (shortTo.replace(/:\/\//g,"").replace(/:splat/g, "").indexOf(":") >= 0)
+                else if (shortTo.replace(/:\/\//g, "").replace(/:splat/g, "").indexOf(":") >= 0)
                 {
                     if (params.logAll) console.log('    Rule with : (other than :splat) in "to" not handled yet: ' + shortFrom + " -> " + shortTo);
                 }
@@ -106,16 +106,7 @@ export class Plugin
                     if (toShortWithIndexHtml.endsWith("/"))
                         toShortWithIndexHtml += "index.html";
 
-                    /*
-                    if (params.logAll)
-                    {
-                        console.log("      fromShort:        " + fromShort);
-                        console.log("      fromShortWithIndexHtml:         " + fromShortWithIndexHtml);
-                        console.log("      toShort:          " + toShort);
-                        console.log("      toShortWithIndexHtml:           " + toShortWithIndexHtml);
-                    }
-                    */
-
+                    let redirectedShortPath;
                     const fromShortWildcardPos = fromShort.indexOf("*");
                     if (fromShortWildcardPos >= 0)
                     {
@@ -149,57 +140,34 @@ export class Plugin
                                 toShortWithIndexHtmlAndSplat += "index.html";
                             if (logDev) console.log("DEV: toShortWithIndexHtmlAndSplat: " + toShortWithIndexHtmlAndSplat);
 
-                            const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, toShortWithIndexHtmlAndSplat);
-                            if (logDev) console.log("DEV: Testing: " + redirectedFullPath);
-
-                            if (fs.existsSync(redirectedFullPath))
-                            {
-                                if (logDev) console.log("DEV: Redirection OK: " + toShortWithIndexHtmlAndSplat);
-                                redirectFound = true;
-                                break;
-                            }
-
-                            if (logDev) console.log("DEV: Target not found: " + toShortWithIndexHtmlAndSplat);
-                            if (params.logAll) console.log("    Redirection target not found: " + toShortWithIndexHtmlAndSplat);
-                            // TODO: check redirect
-                            // TODO: circular redirect
+                            redirectedShortPath = toShortWithIndexHtmlAndSplat;
                         }
                         else
                         {
-                            const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, toShortWithIndexHtml);
-                            if (logDev) console.log("DEV: Testing: " + redirectedFullPath);
-                            if (fs.existsSync(redirectedFullPath))
-                            {
-                                if (logDev) console.log("DEV: Redirection OK: " + toShortWithIndexHtml);
-                                redirectFound = true;
-                                break;
-                            }
-
-                            if (logDev) console.log("DEV: Target not found: " + toShortWithIndexHtml);
-                            if (params.logAll) console.log("    Redirection target not found: " + toShortWithIndexHtml);
-                            // TODO: check redirect
-                            // TODO: circular redirect
+                            redirectedShortPath = toShortWithIndexHtml;
                         }
-
-                        continue;
                     }
-
-                    if (missingShortPathNormalizedWithLeadingSlash == fromShortWithIndexHtml)
+                    else if (missingShortPathNormalizedWithLeadingSlash == fromShortWithIndexHtml)
                     {
-                        const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, toShortWithIndexHtml);
-                        if (logDev) console.log("DEV: Testing: " + redirectedFullPath);
-                        if (fs.existsSync(redirectedFullPath))
-                        {
-                            if (logDev) console.log("DEV: Redirection OK: " + toShortWithIndexHtml);
-                            redirectFound = true;
-                            break;
-                        }
-
-                        if (logDev) console.log("DEV: Target not found: " + toShortWithIndexHtml);
-                        if (params.logAll) console.log("    Redirection target not found: " + toShortWithIndexHtml);
-                        // TODO: check redirect
-                        // TODO: circular redirect
+                        redirectedShortPath = toShortWithIndexHtml;
                     }
+
+                    if (!redirectedShortPath)
+                        continue
+
+                    const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, redirectedShortPath);
+                    if (logDev) console.log("DEV: Testing: " + redirectedFullPath);
+                    if (fs.existsSync(redirectedFullPath))
+                    {
+                        if (logDev) console.log("DEV: Redirection OK: " + redirectedShortPath);
+                        redirectFound = true;
+                        break;
+                    }
+
+                    if (logDev) console.log("DEV: Target not found: " + redirectedShortPath);
+                    if (params.logAll) console.log("    Redirection target not found: " + redirectedShortPath);
+                    // TODO: check redirect
+                    // TODO: circular redirect
                 }
 
                 if (redirectFound)
