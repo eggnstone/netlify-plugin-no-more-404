@@ -44,6 +44,8 @@ export class Checker
             return;
         }
 
+        // TODO: check rules
+
         if (!params.complete)
         {
             logGreen("  Preflight check OK. We're good to go.\n"); // Somehow we need a newline here, or otherwise it is not shown in the Netlify build log.
