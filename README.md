@@ -1,4 +1,4 @@
-Simple replacement for the Netlify plugin `netlify-plugin-no-more-404`
+Simple replacement for the Netlify plugin [netlify-plugin-no-more-404](https://github.com/swyxio/netlify-plugin-no-more-404)
 
 [![npm](https://badge.fury.io/js/@eggnstone%2Fnetlify-plugin-no-more-404.svg)](https://badge.fury.io/js/@eggnstone%2Fnetlify-plugin-no-more-404)
 [![GitHub Issues](https://img.shields.io/github/issues/eggnstone/netlify-plugin-no-more-404.svg)](https://github.com/eggnstone/netlify-plugin-no-more-404/issues)
