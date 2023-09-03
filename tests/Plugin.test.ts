@@ -25,7 +25,7 @@ describe("Plugin", function ()
             expect(redirectConfig.error).toBeUndefined();
 
             const config = new Config({systemConfig, userConfig, redirectConfig});
-            const actual = await Plugin.run(config, {logAll: false, write: false});
+            const actual = await Plugin.run(config, {logAll: false, write: false, isPreflight: false});
 
             assert(actual.error);
             expect(actual.error.startsWith("Error: Path not found: ")).toBeTruthy();
@@ -47,7 +47,7 @@ describe("Plugin", function ()
             expect(redirectConfig.error).toBeUndefined();
 
             const config = new Config({systemConfig, userConfig, redirectConfig});
-            const actual = await Plugin.run(config, {logAll: false, write: false});
+            const actual = await Plugin.run(config, {logAll: false, write: false, isPreflight: false});
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths).toStrictEqual([]);
@@ -68,7 +68,7 @@ describe("Plugin", function ()
             expect(redirectConfig.error).toBeUndefined();
 
             const config = new Config({systemConfig, userConfig, redirectConfig});
-            const actual = await Plugin.run(config, {logAll: false, write: false});
+            const actual = await Plugin.run(config, {logAll: false, write: false, isPreflight: false});
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths).toStrictEqual(["main.html"]);
@@ -89,7 +89,7 @@ describe("Plugin", function ()
             expect(redirectConfig.error).toBeUndefined();
 
             const config = new Config({systemConfig, userConfig, redirectConfig});
-            const actual = await Plugin.run(config, {logAll: false, write: false});
+            const actual = await Plugin.run(config, {logAll: false, write: false, isPreflight: false});
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths).toStrictEqual(["index.html"]);
@@ -110,7 +110,7 @@ describe("Plugin", function ()
             expect(redirectConfig.error).toBeUndefined();
 
             const config = new Config({systemConfig, userConfig, redirectConfig});
-            const actual = await Plugin.run(config, {logAll: false, write: false});
+            const actual = await Plugin.run(config, {logAll: false, write: false, isPreflight: false});
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths).toStrictEqual(["sub\\sub.html"]);
@@ -131,7 +131,7 @@ describe("Plugin", function ()
             expect(redirectConfig.error).toBeUndefined();
 
             const config = new Config({systemConfig, userConfig, redirectConfig});
-            const actual = await Plugin.run(config, {logAll: false, write: false});
+            const actual = await Plugin.run(config, {logAll: false, write: false, isPreflight: false});
 
             expect(actual.error).toBeUndefined();
             expect(actual.missingPaths).toStrictEqual(["sub\\index.html"]);

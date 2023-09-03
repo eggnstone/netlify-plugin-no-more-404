@@ -7,14 +7,14 @@ import {Config} from "./Config";
 
 export class Checker
 {
-    static async check(params: { data: any, complete: boolean }): Promise<void>
+    static async check(params: { data: any, isPreflight: boolean }): Promise<void>
     {
         logBlue("# eggnstone-netlify-plugin-no-more-404 START");
 
-        if (params.complete)
-            console.log("  Performing full check.");
-        else
+        if (params.isPreflight)
             console.log("  Performing preflight check only.");
+        else
+            console.log("  Performing full check.");
 
         // noinspection JSUnresolvedReference
         const utilsBuild = params.data.utils.build;
@@ -46,7 +46,7 @@ export class Checker
 
         // TODO: check rules
 
-        if (!params.complete)
+        if (params.isPreflight && !userConfig.checkInPreflight)
         {
             logGreen("  Preflight check OK. We're good to go.\n"); // Somehow we need a newline here, or otherwise it is not shown in the Netlify build log.
             logBlue("# eggnstone-netlify-plugin-no-more-404 END");
@@ -54,7 +54,7 @@ export class Checker
         }
 
         const config = new Config({systemConfig, userConfig, redirectConfig});
-        const result = await Plugin.run(config, {logAll: true, write: true});
+        const result = await Plugin.run(config, {logAll: true, write: !params.isPreflight, isPreflight: params.isPreflight});
 
         let error;
         if (result.error)
@@ -70,7 +70,7 @@ export class Checker
         logBlue("# eggnstone-netlify-plugin-no-more-404 END");
 
         if (!error)
-            return
+            return;
 
         if (userConfig.failBuildOnError)
         {

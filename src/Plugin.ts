@@ -9,12 +9,20 @@ const logDev = false;
 
 export class Plugin
 {
-    static async run(config: Config, params: { logAll: boolean, write: boolean }): Promise<{ error?: string, missingPaths: string[], redirectedPaths: string[] }>
+    static async run(config: Config, params: { logAll: boolean, write: boolean, isPreflight: boolean }): Promise<{ error?: string, missingPaths: string[], redirectedPaths: string[] }>
     {
         try
         {
             if (!fs.existsSync(config.systemConfig.fullPublishDir))
+            {
+                if (params.isPreflight)
+                {
+                    if (params.logAll) logGreen(`  Publish directory not found (that's OK in preflight): ${config.systemConfig.fullPublishDir}`);
+                    return {error: undefined, missingPaths: [], redirectedPaths: []};
+                }
+
                 return {error: `Publish directory not found: ${config.systemConfig.fullPublishDir}`, missingPaths: [], redirectedPaths: []};
+            }
 
             const newShortPaths = await Collector.collect({startPath: config.systemConfig.fullPublishDir, currentPath: config.systemConfig.fullPublishDir});
 
@@ -23,16 +31,22 @@ export class Plugin
 
             if (!oldShortPaths)
             {
-                if (params.logAll) logGreen("  No data from previous run found. Saving current data.");
                 if (params.write)
+                {
+                    if (params.logAll) logGreen("  No data from previous run found. => Nothing to check. Saving new data.");
                     store.setAndWrite(config.userConfig.cacheKey, newShortPaths);
+                }
+                else
+                {
+                    if (params.logAll) logGreen("  No data from previous run found. => Nothing to check.");
+                }
 
                 return {error: undefined, missingPaths: [], redirectedPaths: []};
             }
 
             if (params.logAll) console.log("  Data from previous run found. Comparing with current data.");
             const missingShortPaths = [];
-            for (let oldShortPath of oldShortPaths)
+            for (const oldShortPath of oldShortPaths)
             {
                 const oldFullPath = path.join(config.systemConfig.fullPublishDir, oldShortPath);
                 if (!fs.existsSync(oldFullPath))
@@ -44,9 +58,15 @@ export class Plugin
 
             if (missingShortPaths.length == 0)
             {
-                if (params.logAll) logGreen("  No paths missing. We're good to go.\n"); // Somehow we need a newline here, or otherwise it is not shown in the Netlify build log.
                 if (params.write)
+                {
+                    if (params.logAll) logGreen("  No paths missing. Saving new data. We're good to go.\n"); // Somehow we need a newline here, or otherwise it is not shown in the Netlify build log.
                     store.setAndWrite(config.userConfig.cacheKey, newShortPaths);
+                }
+                else
+                {
+                    if (params.logAll) logGreen("  No paths missing. We're good to go.\n"); // Somehow we need a newline here, or otherwise it is not shown in the Netlify build log.
+                }
 
                 return {error: undefined, missingPaths: [], redirectedPaths: []};
             }
@@ -153,7 +173,7 @@ export class Plugin
                     }
 
                     if (!redirectedShortPath)
-                        continue
+                        continue;
 
                     const redirectedFullPath = path.join(config.systemConfig.fullPublishDir, redirectedShortPath);
                     if (logDev) console.log("DEV: Testing: " + redirectedFullPath);
@@ -183,11 +203,15 @@ export class Plugin
 
             if (stillMissingShortPaths.length == 0)
             {
-                if (params.logAll) logGreen("  No paths missing (after applying redirects). We're good to go.");
                 if (params.write)
                 {
+                    if (params.logAll) logGreen("  No paths missing (after applying redirects). Saving new data. We're good to go.");
                     const combinedCollection = redirectedShortPaths.concat(newShortPaths);
                     store.setAndWrite(config.userConfig.cacheKey, combinedCollection);
+                }
+                else
+                {
+                    if (params.logAll) logGreen("  No paths missing (after applying redirects). We're good to go.");
                 }
 
                 return {error: undefined, missingPaths: [], redirectedPaths: redirectedShortPaths};

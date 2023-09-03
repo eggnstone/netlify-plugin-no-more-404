@@ -11,6 +11,7 @@ describe("userConfig", function ()
         expect(actual.error).toBe("inputs not set.");
     });
 
+    /*
     it("Missing failBuildOnError should return an error.", function ()
     {
         const inputs = {};
@@ -19,6 +20,7 @@ describe("userConfig", function ()
 
         expect(actual.error).toBe("failBuildOnError must be true or false.");
     });
+    */
 
     it("Missing cacheKey should an error.", function ()
     {

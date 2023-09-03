@@ -22,11 +22,11 @@ export class SystemConfig
         if (!constants)
             return new SystemConfig({error: "constants not set.", fullCacheDir: "", fullPublishDir: ""});
 
-        let cacheDir = constants["CACHE_DIR"];
+        const cacheDir = constants["CACHE_DIR"];
         if (!cacheDir)
             return new SystemConfig({error: "cacheDir not set.", fullCacheDir: "", fullPublishDir: ""});
 
-        let publishDir = constants["PUBLISH_DIR"];
+        const publishDir = constants["PUBLISH_DIR"];
         if (!publishDir)
             return new SystemConfig({error: "publishDir not set.", fullCacheDir: "", fullPublishDir: ""});
 

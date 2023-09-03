@@ -1,0 +1,23 @@
+{
+    "extends": [
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parserOptions": {
+        "parser": "@typescript-eslint/parser"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        // No fix found for where @ts-ignore is used :(
+        "@typescript-eslint/ban-ts-comment": "off",
+        // Would be nice to have no "any". TODO
+        "@typescript-eslint/no-explicit-any": "off",
+        // Best practice. TODO!
+        "@typescript-eslint/no-unused-vars": "off",
+        // Force semicolons!
+        "@typescript-eslint/semi": "warn",
+        // Disable the base rule as it can report incorrect errors. @typescript-eslint/semi takes care of this.
+        "semi": "off"
+    }
+}

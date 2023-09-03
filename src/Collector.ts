@@ -20,11 +20,7 @@ export class Collector
             if (!newPath.endsWith(".html"))
                 continue;
 
-            let shortPath = path.relative(params.startPath, newPath);
-            /*if (shortPath.endsWith("index.html"))
-                shortPath = shortPath.slice(0, -10);
-            else
-                shortPath = shortPath.slice(0, -5);*/
+            const shortPath = path.relative(params.startPath, newPath);
 
             collection.push(shortPath);
         }
