@@ -17,7 +17,7 @@ export class Plugin
             {
                 if (params.isPreflight)
                 {
-                    if (params.logAll) logGreen(`  Publish directory not found (that's OK in preflight): ${config.systemConfig.fullPublishDir}`);
+                    if (params.logAll) logGreen(`  Publish directory not found (that's OK in preflight): ${config.systemConfig.fullPublishDir}\n`); // Somehow we need a newline here, or otherwise it is not shown in the Netlify build log.
                     return {error: undefined, missingPaths: [], redirectedPaths: []};
                 }
 

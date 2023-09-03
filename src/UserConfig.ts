@@ -43,12 +43,12 @@ export class UserConfig
             const cacheKeyText = cacheKey === undefined ? "<undefined>" : cacheKey.length == 0 ? "<empty>" : '"' + cacheKey + '"';
             const cacheKeysText = Array.isArray(cacheKeys) ? cacheKeys.length == 1 ? "1 item" : cacheKeys.length + " items" : "no items";
             const envVarNameText = environmentVariableName === undefined ? "<undefined>" : environmentVariableName.length == 0 ? "<empty>" : '"' + environmentVariableName + '"';
-            console.log("    failBuildOnError: " + failBuildOnError );
+            console.log("    failBuildOnError: " + failBuildOnError);
             console.log("    cacheKey:         " + cacheKeyText);
             console.log("    cacheKeys:        " + cacheKeysText);
             console.log("    envVarName:       " + envVarNameText);
             //console.log("    debug:            " + debug );
-            console.log("    checkInPreflight: " + checkInPreflight );
+            console.log("    checkInPreflight: " + checkInPreflight);
         }
 
         if (cacheKey)
