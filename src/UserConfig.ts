@@ -1,27 +1,23 @@
 export class UserConfig
 {
-    public static readonly CHECK_IN_PREFLIGHT_DEFAULT = false;
     public static readonly DEBUG_DEFAULT = false;
     public static readonly FAIL_BUILD_ON_ERROR_DEFAULT = true;
 
     public readonly error?: string;
 
     public readonly cacheKey: string;
-    public readonly checkInPreflight: boolean;
     public readonly debugUnused: boolean;
     public readonly failBuildOnError: boolean;
 
     private constructor(params: {
         error?: string,
         cacheKey?: string,
-        checkInPreflight?: boolean,
         debug?: boolean,
         failBuildOnError?: boolean
     })
     {
         this.error = params.error;
         this.cacheKey = params.cacheKey ?? "";
-        this.checkInPreflight = params.checkInPreflight ?? UserConfig.CHECK_IN_PREFLIGHT_DEFAULT;
         this.debugUnused = params.debug ?? UserConfig.DEBUG_DEFAULT;
         this.failBuildOnError = params.failBuildOnError ?? UserConfig.FAIL_BUILD_ON_ERROR_DEFAULT;
     }
@@ -36,7 +32,6 @@ export class UserConfig
         const cacheKeys = inputs["cacheKeys"];
         const environmentVariableName = inputs["environmentVariableName"];
         const debug = inputs["debug"];
-        const checkInPreflight = inputs["checkInPreflight"];
 
         if (logAll)
         {
@@ -48,7 +43,6 @@ export class UserConfig
             console.log("    cacheKeys:        " + cacheKeysText);
             console.log("    envVarName:       " + envVarNameText);
             //console.log("    debug:            " + debug );
-            console.log("    checkInPreflight: " + checkInPreflight);
         }
 
         if (cacheKey)
@@ -81,6 +75,6 @@ export class UserConfig
             if (logAll) console.log('    Final cacheKey:   "' + cacheKey + '"');
         }
 
-        return new UserConfig({failBuildOnError, cacheKey, debug, checkInPreflight});
+        return new UserConfig({failBuildOnError, cacheKey, debug});
     }
 }

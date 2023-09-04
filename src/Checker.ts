@@ -46,7 +46,7 @@ export class Checker
 
         // TODO: check rules
 
-        if (params.isPreflight && !userConfig.checkInPreflight)
+        if (params.isPreflight)
         {
             logGreen("  Preflight check OK. We're good to go.\n"); // Somehow we need a newline here, or otherwise it is not shown in the Netlify build log.
             logBlue("# eggnstone-netlify-plugin-no-more-404 END");

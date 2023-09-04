@@ -14,15 +14,7 @@ export class Plugin
         try
         {
             if (!fs.existsSync(config.systemConfig.fullPublishDir))
-            {
-                if (params.isPreflight)
-                {
-                    if (params.logAll) logGreen(`  Publish directory not found (that's OK in preflight): ${config.systemConfig.fullPublishDir}\n`); // Somehow we need a newline here, or otherwise it is not shown in the Netlify build log.
-                    return {error: undefined, missingPaths: [], redirectedPaths: []};
-                }
-
                 return {error: `Publish directory not found: ${config.systemConfig.fullPublishDir}`, missingPaths: [], redirectedPaths: []};
-            }
 
             const newShortPaths = await Collector.collect({startPath: config.systemConfig.fullPublishDir, currentPath: config.systemConfig.fullPublishDir});
 

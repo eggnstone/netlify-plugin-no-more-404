@@ -15,6 +15,3 @@ inputs:
   - name: debug
     description: "Not used yet."
     default: false
-  - name: checkInPreflight
-    description: "If the plugin should check for 404s in the preflight step, too"
-    default: false
