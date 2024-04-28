@@ -12,6 +12,9 @@ inputs:
   - name: cacheKeys
     description: "List of cache keys to use (e.g. ['TargetA_1', 'TargetB_2']). (When using multiple targets only. Will be ignored when cacheKey is set.)"
     default: []
+  - name: skipPatterns
+    description: "Skip URLs starting with these patterns. (e.g. ['/admin', '/api'])"
+    default: []
   - name: debug
     description: "Not used yet."
     default: false

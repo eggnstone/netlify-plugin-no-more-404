@@ -54,7 +54,7 @@ export class Checker
         }
 
         const config = new Config({systemConfig, userConfig, redirectConfig});
-        const result = await Plugin.run(config, {logAll: true, write: !params.isPreflight, isPreflight: params.isPreflight});
+        const result = await Plugin.run(config, {logAll: true, write: !params.isPreflight, isPreflight: params.isPreflight, skipPatterns: userConfig.skipPatterns});
 
         let error;
         if (result.error)

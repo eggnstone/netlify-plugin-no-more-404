@@ -2,24 +2,28 @@ export class UserConfig
 {
     public static readonly DEBUG_DEFAULT = false;
     public static readonly FAIL_BUILD_ON_ERROR_DEFAULT = true;
+    public static readonly SKIP_PATTERNS_DEFAULT: string[] = [];
 
     public readonly error?: string;
 
     public readonly cacheKey: string;
     public readonly debugUnused: boolean;
     public readonly failBuildOnError: boolean;
+    public readonly skipPatterns: string[];
 
     private constructor(params: {
         error?: string,
         cacheKey?: string,
         debug?: boolean,
-        failBuildOnError?: boolean
+        failBuildOnError?: boolean,
+        skipPatterns?: string[]
     })
     {
         this.error = params.error;
         this.cacheKey = params.cacheKey ?? "";
         this.debugUnused = params.debug ?? UserConfig.DEBUG_DEFAULT;
         this.failBuildOnError = params.failBuildOnError ?? UserConfig.FAIL_BUILD_ON_ERROR_DEFAULT;
+        this.skipPatterns = params.skipPatterns ?? UserConfig.SKIP_PATTERNS_DEFAULT;
     }
 
     public static create(inputs: any, logAll: boolean): UserConfig
@@ -27,11 +31,12 @@ export class UserConfig
         if (!inputs)
             return new UserConfig({error: "inputs not set."});
 
-        const failBuildOnError = inputs["failBuildOnError"];
         let cacheKey = inputs["cacheKey"];
         const cacheKeys = inputs["cacheKeys"];
-        const environmentVariableName = inputs["environmentVariableName"];
         const debug = inputs["debug"];
+        const environmentVariableName = inputs["environmentVariableName"];
+        const failBuildOnError = inputs["failBuildOnError"];
+        const skipPatterns = inputs["skipPatterns"];
 
         if (logAll)
         {
@@ -42,6 +47,7 @@ export class UserConfig
             console.log("    cacheKey:         " + cacheKeyText);
             console.log("    cacheKeys:        " + cacheKeysText);
             console.log("    envVarName:       " + envVarNameText);
+            console.log("    skipPatterns:     " + skipPatterns);
             //console.log("    debug:            " + debug );
         }
 
@@ -75,6 +81,6 @@ export class UserConfig
             if (logAll) console.log('    Final cacheKey:   "' + cacheKey + '"');
         }
 
-        return new UserConfig({failBuildOnError, cacheKey, debug});
+        return new UserConfig({failBuildOnError, cacheKey, debug, skipPatterns});
     }
 }

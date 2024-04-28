@@ -2,14 +2,14 @@ import * as fs from "fs";
 import * as path from "path";
 import {Collector} from "./Collector";
 import {Store} from "./Store";
-import {logGreen, logOrange, logRed} from "./Log";
+import {logBlue, logGreen, logOrange, logRed} from "./Log";
 import {Config} from "./Config";
 
 const logDev = false;
 
 export class Plugin
 {
-    static async run(config: Config, params: { logAll: boolean, write: boolean, isPreflight: boolean }): Promise<{ error?: string, missingPaths: string[], redirectedPaths: string[] }>
+    static async run(config: Config, params: { logAll: boolean, write: boolean, isPreflight: boolean, skipPatterns: string[] }): Promise<{ error?: string, missingPaths: string[], redirectedPaths: string[] }>
     {
         try
         {
@@ -41,6 +41,19 @@ export class Plugin
             for (const oldShortPath of oldShortPaths)
             {
                 const oldFullPath = path.join(config.systemConfig.fullPublishDir, oldShortPath);
+
+                if (Plugin.skipPath(oldFullPath, params.skipPatterns))
+                {
+                    if (params.logAll) logBlue("    Skipping1: " + oldFullPath);
+                    continue;
+                }
+
+                if (Plugin.skipPath(oldShortPath, params.skipPatterns))
+                {
+                    if (params.logAll) logBlue("    Skipping2: " + oldShortPath);
+                    continue;
+                }
+
                 if (!fs.existsSync(oldFullPath))
                 {
                     if (params.logAll) logOrange("    Missing: " + oldShortPath);
@@ -218,5 +231,16 @@ export class Plugin
             if (params.logAll) console.error(e);
             return {error: `${e}`, missingPaths: [], redirectedPaths: []};
         }
+    }
+
+    private static skipPath(oldFullPath: string, skipPatterns: string[])
+    {
+        for (const skipPattern of skipPatterns)
+        {
+            if (oldFullPath.startsWith(skipPattern))
+                return true;
+        }
+
+        return false;
     }
 }
