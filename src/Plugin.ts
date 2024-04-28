@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import {Collector} from "./Collector";
 import {Store} from "./Store";
-import {logBlue, logGreen, logOrange, logRed} from "./Log";
+import {logGreen, logOrange, logRed} from "./Log";
 import {Config} from "./Config";
 
 const logDev = false;
@@ -40,24 +40,16 @@ export class Plugin
             const missingShortPaths = [];
             for (const oldShortPath of oldShortPaths)
             {
-                const oldFullPath = path.join(config.systemConfig.fullPublishDir, oldShortPath);
-
-                if (Plugin.skipPath(oldFullPath, params.skipPatterns))
-                {
-                    if (params.logAll) logBlue("    Skipping1: " + oldFullPath);
-                    continue;
-                }
-
                 if (Plugin.skipPath("/" + oldShortPath, params.skipPatterns))
                 {
-                    if (params.logAll) logBlue("    Skipping2: " + oldShortPath);
+                    //if (params.logAll) logBlue("    Skipping: " + oldShortPath);
                     continue;
                 }
 
+                const oldFullPath = path.join(config.systemConfig.fullPublishDir, oldShortPath);
                 if (!fs.existsSync(oldFullPath))
                 {
                     if (params.logAll) logOrange("    Missing: " + oldShortPath);
-                    if (params.logAll) logOrange("    Missing oldFullPath: " + oldFullPath);
                     missingShortPaths.push(oldShortPath);
                 }
             }
