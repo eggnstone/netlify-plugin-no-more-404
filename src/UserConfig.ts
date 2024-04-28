@@ -46,8 +46,8 @@ export class UserConfig
             console.log("    failBuildOnError: " + failBuildOnError);
             console.log("    cacheKey:         " + cacheKeyText);
             console.log("    cacheKeys:        " + cacheKeysText);
-            console.log("    envVarName:       " + envVarNameText);
-            console.log("    skipPatterns:     " + skipPatterns);
+            console.log("    1envVarName:       " + envVarNameText);
+            console.log("    2skipPatterns:     " + skipPatterns);
             //console.log("    debug:            " + debug );
         }
 

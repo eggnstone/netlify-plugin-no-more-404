@@ -48,7 +48,7 @@ export class Plugin
                     continue;
                 }
 
-                if (Plugin.skipPath(oldShortPath, params.skipPatterns))
+                if (Plugin.skipPath("/" + oldShortPath, params.skipPatterns))
                 {
                     if (params.logAll) logBlue("    Skipping2: " + oldShortPath);
                     continue;
@@ -57,6 +57,7 @@ export class Plugin
                 if (!fs.existsSync(oldFullPath))
                 {
                     if (params.logAll) logOrange("    Missing: " + oldShortPath);
+                    if (params.logAll) logOrange("    Missing oldFullPath: " + oldFullPath);
                     missingShortPaths.push(oldShortPath);
                 }
             }
@@ -233,11 +234,11 @@ export class Plugin
         }
     }
 
-    private static skipPath(oldFullPath: string, skipPatterns: string[])
+    private static skipPath(path: string, skipPatterns: string[])
     {
         for (const skipPattern of skipPatterns)
         {
-            if (oldFullPath.startsWith(skipPattern))
+            if (path.startsWith(skipPattern))
                 return true;
         }
 
