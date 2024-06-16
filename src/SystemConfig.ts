@@ -35,10 +35,10 @@ export class SystemConfig
 
         if (logAll)
         {
-            console.log("    cacheDir:         " + cacheDir);
-            console.log("    fullCacheDir:     " + fullCacheDir);
-            console.log("    publishDir:       " + publishDir);
-            console.log("    fullPublishDir:   " + fullPublishDir);
+            console.log("    cacheDir:          " + cacheDir);
+            console.log("    fullCacheDir:      " + fullCacheDir);
+            console.log("    publishDir:        " + publishDir);
+            console.log("    fullPublishDir:    " + fullPublishDir);
         }
 
         return new SystemConfig({fullCacheDir, fullPublishDir});

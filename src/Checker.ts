@@ -1,7 +1,7 @@
 import {Plugin} from "./Plugin";
 import {UserConfig} from "./UserConfig";
 import {SystemConfig} from "./SystemConfig";
-import {logBlue, logDebug, logError, logGreen, logInfo} from "./Log";
+import {logBlue, logError, logGreen, logInfo} from "./Log";
 import {RedirectConfig} from "./RedirectConfig";
 import {Config} from "./Config";
 import * as child_process from "node:child_process";
@@ -71,11 +71,18 @@ export class Checker
         logBlue("# eggnstone-netlify-plugin-no-more-404 END");
 
         if (!error)
+        {
+            if (userConfig.commandOnSuccess)
+            {
+                logInfo("  Executing CommandOnSuccess: " + userConfig.commandOnSuccess);
+                child_process.execSync(userConfig.commandOnSuccess);
+            }
+
             return;
+        }
 
         if (userConfig.commandOnError)
         {
-            logDebug("  Executing CommandOnError: " + userConfig.commandOnError);
             logInfo("  Executing CommandOnError: " + userConfig.commandOnError);
             child_process.execSync(userConfig.commandOnError);
         }

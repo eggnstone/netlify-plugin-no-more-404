@@ -3,6 +3,9 @@ inputs:
   - name: commandOnError
     description: "Command to be called when 404 is found, e.g. for sending an email."
     default: ""
+  - name: commandOnSuccess
+    description: "Command to be called when no 404 is found, e.g. for sending an email."
+    default: ""
   - name: failBuildOnError
     description: "Behavior when 404 is found: abort the build or not."
     default: false
