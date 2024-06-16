@@ -27,10 +27,10 @@ export class UserConfig
     {
         this.error = params.error;
         this.cacheKey = params.cacheKey ?? "";
-        this.debugUnused = params.debug ?? UserConfig.DEBUG_DEFAULT;
+        this.debugUnused = params.debug || UserConfig.DEBUG_DEFAULT;
         this.commandOnError = params.commandOnError ?? UserConfig.COMMAND_ON_ERROR_DEFAULT;
-        this.failBuildOnError = params.failBuildOnError ?? UserConfig.FAIL_BUILD_ON_ERROR_DEFAULT;
-        this.failPluginOnError = params.failPluginOnError ?? UserConfig.FAIL_PLUGIN_ON_ERROR_DEFAULT;
+        this.failBuildOnError = params.failBuildOnError || UserConfig.FAIL_BUILD_ON_ERROR_DEFAULT;
+        this.failPluginOnError = params.failPluginOnError || UserConfig.FAIL_PLUGIN_ON_ERROR_DEFAULT;
         this.skipPatterns = params.skipPatterns ?? UserConfig.SKIP_PATTERNS_DEFAULT;
     }
 

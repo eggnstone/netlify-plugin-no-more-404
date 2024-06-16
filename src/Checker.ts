@@ -1,7 +1,7 @@
 import {Plugin} from "./Plugin";
 import {UserConfig} from "./UserConfig";
 import {SystemConfig} from "./SystemConfig";
-import {logBlue, logDebug, logError, logGreen} from "./Log";
+import {logBlue, logDebug, logError, logGreen, logInfo} from "./Log";
 import {RedirectConfig} from "./RedirectConfig";
 import {Config} from "./Config";
 import * as child_process from "node:child_process";
@@ -76,16 +76,19 @@ export class Checker
         if (userConfig.commandOnError)
         {
             logDebug("  Executing CommandOnError: " + userConfig.commandOnError);
+            logInfo("  Executing CommandOnError: " + userConfig.commandOnError);
             child_process.execSync(userConfig.commandOnError);
         }
 
         if (userConfig.failBuildOnError)
         {
+            logInfo("  Failing build.");
             // noinspection JSUnresolvedReference
             utilsBuild.failBuild(error);
         }
         else if (userConfig.failPluginOnError)
         {
+            logInfo("  Failing plugin.");
             // noinspection JSUnresolvedReference
             utilsBuild.failPlugin(error);
         }
