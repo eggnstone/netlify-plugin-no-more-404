@@ -16,6 +16,8 @@ export class UserConfig
     public readonly failBuildOnError: boolean;
     public readonly failPluginOnError: boolean;
     public readonly skipPatterns: string[];
+    public readonly environmentVariableName: string;
+    public readonly environmentVariableValue: string;
 
     private constructor(params: {
         error?: string,
@@ -25,7 +27,9 @@ export class UserConfig
         commandOnSuccess?: string,
         failBuildOnError?: boolean,
         failPluginOnError?: boolean,
-        skipPatterns?: string[]
+        skipPatterns?: string[],
+        environmentVariableName?: string,
+        environmentVariableValue?: string
     })
     {
         this.error = params.error;
@@ -36,6 +40,8 @@ export class UserConfig
         this.failBuildOnError = params.failBuildOnError ?? UserConfig.FAIL_BUILD_ON_ERROR_DEFAULT;
         this.failPluginOnError = params.failPluginOnError ?? UserConfig.FAIL_PLUGIN_ON_ERROR_DEFAULT;
         this.skipPatterns = params.skipPatterns ?? UserConfig.SKIP_PATTERNS_DEFAULT;
+        this.environmentVariableName = params.environmentVariableName ?? "";
+        this.environmentVariableValue = params.environmentVariableValue ?? "";
     }
 
     public static create(inputs: any, logAll: boolean): UserConfig
@@ -69,6 +75,8 @@ export class UserConfig
             //console.log("    debug:             " + debug );
         }
 
+        const environmentVariableValue = environmentVariableName ? (process.env[environmentVariableName] ?? "") : "";
+
         if (cacheKey)
         {
             if (environmentVariableName || cacheKeys)
@@ -77,11 +85,28 @@ export class UserConfig
         else
         {
             if (!environmentVariableName || !cacheKeys)
-                return new UserConfig({error: "cacheKey not set, then cacheKeys and environmentVariableName must be set.", commandOnError, commandOnSuccess, failBuildOnError, failPluginOnError});
+                return new UserConfig({
+                    error: "cacheKey not set, then cacheKeys and environmentVariableName must be set.",
+                    commandOnError,
+                    commandOnSuccess,
+                    failBuildOnError,
+                    failPluginOnError,
+                    debug,
+                    environmentVariableName,
+                    environmentVariableValue
+                });
 
-            const environmentVariableValue = process.env[environmentVariableName];
             if (!environmentVariableValue)
-                return new UserConfig({error: 'Environment variable "' + environmentVariableName + '" not set.', commandOnError, commandOnSuccess, failBuildOnError, failPluginOnError});
+                return new UserConfig({
+                    error: 'Environment variable "' + environmentVariableName + '" not set.',
+                    commandOnError,
+                    commandOnSuccess,
+                    failBuildOnError,
+                    failPluginOnError,
+                    debug,
+                    environmentVariableName,
+                    environmentVariableValue
+                });
 
             let key;
             for (key of cacheKeys)
@@ -94,11 +119,30 @@ export class UserConfig
             }
 
             if (!cacheKey)
-                return new UserConfig({error: 'No cache key found for "' + environmentVariableValue + '" in ' + JSON.stringify(cacheKeys) + ".", commandOnError, commandOnSuccess, failBuildOnError, failPluginOnError});
+                return new UserConfig({
+                    error: 'No cache key found for "' + environmentVariableValue + '" in ' + JSON.stringify(cacheKeys) + ".",
+                    commandOnError,
+                    commandOnSuccess,
+                    failBuildOnError,
+                    failPluginOnError,
+                    debug,
+                    environmentVariableName,
+                    environmentVariableValue
+                });
 
             if (logAll) console.log('    Final cacheKey:    "' + cacheKey + '"');
         }
 
-        return new UserConfig({commandOnError, commandOnSuccess, failBuildOnError, failPluginOnError, cacheKey, debug, skipPatterns});
+        return new UserConfig({
+            commandOnError,
+            commandOnSuccess,
+            failBuildOnError,
+            failPluginOnError,
+            debug,
+            environmentVariableName,
+            environmentVariableValue,
+            cacheKey,
+            skipPatterns
+        });
     }
 }

@@ -74,8 +74,13 @@ export class Checker
         {
             if (userConfig.commandOnSuccess)
             {
-                logInfo("  Executing CommandOnSuccess: " + userConfig.commandOnSuccess);
-                child_process.execSync(userConfig.commandOnSuccess);
+                logInfo("  CommandOnSuccess: " + userConfig.commandOnSuccess);
+                let command = userConfig.commandOnSuccess;
+                command = command.replace(/%ENVIRONMENT_VARIABLE_NAME%/g, userConfig.environmentVariableName);
+                command = command.replace(/%ENVIRONMENT_VARIABLE_VALUE%/g, userConfig.environmentVariableValue);
+                command = command.replace(/%ERROR_TEXT%/g, "No error. All good.");
+                logInfo("  Executing command: " + command);
+                child_process.execSync(command);
             }
 
             return;
@@ -83,8 +88,13 @@ export class Checker
 
         if (userConfig.commandOnError)
         {
-            logInfo("  Executing CommandOnError: " + userConfig.commandOnError);
-            child_process.execSync(userConfig.commandOnError);
+            logInfo("  CommandOnError: " + userConfig.commandOnError);
+            let command = userConfig.commandOnError;
+            command = command.replace(/%ENVIRONMENT_VARIABLE_NAME%/g, userConfig.environmentVariableName);
+            command = command.replace(/%ENVIRONMENT_VARIABLE_VALUE%/g, userConfig.environmentVariableValue);
+            command = command.replace(/%ERROR_TEXT%/g, error);
+            logInfo("  Executing command: " + command);
+            child_process.execSync(command);
         }
 
         if (userConfig.failBuildOnError)
