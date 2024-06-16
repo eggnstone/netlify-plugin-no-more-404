@@ -1,6 +1,7 @@
 export class UserConfig
 {
     public static readonly DEBUG_DEFAULT = false;
+    public static readonly COMMAND_ON_ERROR_DEFAULT = "";
     public static readonly FAIL_BUILD_ON_ERROR_DEFAULT = true;
     public static readonly SKIP_PATTERNS_DEFAULT: string[] = [];
 
@@ -8,6 +9,7 @@ export class UserConfig
 
     public readonly cacheKey: string;
     public readonly debugUnused: boolean;
+    public readonly commandOnError: string;
     public readonly failBuildOnError: boolean;
     public readonly skipPatterns: string[];
 
@@ -15,6 +17,7 @@ export class UserConfig
         error?: string,
         cacheKey?: string,
         debug?: boolean,
+        commandOnError?: string,
         failBuildOnError?: boolean,
         skipPatterns?: string[]
     })
@@ -22,6 +25,7 @@ export class UserConfig
         this.error = params.error;
         this.cacheKey = params.cacheKey ?? "";
         this.debugUnused = params.debug ?? UserConfig.DEBUG_DEFAULT;
+        this.commandOnError = params.commandOnError ?? UserConfig.COMMAND_ON_ERROR_DEFAULT;
         this.failBuildOnError = params.failBuildOnError ?? UserConfig.FAIL_BUILD_ON_ERROR_DEFAULT;
         this.skipPatterns = params.skipPatterns ?? UserConfig.SKIP_PATTERNS_DEFAULT;
     }
@@ -35,6 +39,7 @@ export class UserConfig
         const cacheKeys = inputs["cacheKeys"];
         const debug = inputs["debug"];
         const environmentVariableName = inputs["environmentVariableName"];
+        const commandOnError = inputs["commandOnError"];
         const failBuildOnError = inputs["failBuildOnError"];
         const skipPatterns = inputs["skipPatterns"];
 
@@ -43,6 +48,7 @@ export class UserConfig
             const cacheKeyText = cacheKey === undefined ? "<undefined>" : cacheKey.length == 0 ? "<empty>" : '"' + cacheKey + '"';
             const cacheKeysText = Array.isArray(cacheKeys) ? cacheKeys.length == 1 ? "1 item" : cacheKeys.length + " items" : "no items";
             const envVarNameText = environmentVariableName === undefined ? "<undefined>" : environmentVariableName.length == 0 ? "<empty>" : '"' + environmentVariableName + '"';
+            console.log("    commandOnError:   " + commandOnError);
             console.log("    failBuildOnError: " + failBuildOnError);
             console.log("    cacheKey:         " + cacheKeyText);
             console.log("    cacheKeys:        " + cacheKeysText);
@@ -59,11 +65,11 @@ export class UserConfig
         else
         {
             if (!environmentVariableName || !cacheKeys)
-                return new UserConfig({error: "cacheKey not set, then cacheKeys and environmentVariableName must be set.", failBuildOnError});
+                return new UserConfig({error: "cacheKey not set, then cacheKeys and environmentVariableName must be set.", commandOnError, failBuildOnError});
 
             const environmentVariableValue = process.env[environmentVariableName];
             if (!environmentVariableValue)
-                return new UserConfig({error: 'Environment variable "' + environmentVariableName + '" not set.', failBuildOnError});
+                return new UserConfig({error: 'Environment variable "' + environmentVariableName + '" not set.', commandOnError, failBuildOnError});
 
             let key;
             for (key of cacheKeys)
@@ -76,11 +82,11 @@ export class UserConfig
             }
 
             if (!cacheKey)
-                return new UserConfig({error: 'No cache key found for "' + environmentVariableValue + '" in ' + JSON.stringify(cacheKeys) + ".", failBuildOnError});
+                return new UserConfig({error: 'No cache key found for "' + environmentVariableValue + '" in ' + JSON.stringify(cacheKeys) + ".", commandOnError, failBuildOnError});
 
             if (logAll) console.log('    Final cacheKey:   "' + cacheKey + '"');
         }
 
-        return new UserConfig({failBuildOnError, cacheKey, debug, skipPatterns});
+        return new UserConfig({commandOnError, failBuildOnError, cacheKey, debug, skipPatterns});
     }
 }

@@ -1,5 +1,6 @@
 ncu -u
 npm i
+clean lib folder
 npm run build
 npm publish --access=public // first time
 npm publish                 // consecutive times

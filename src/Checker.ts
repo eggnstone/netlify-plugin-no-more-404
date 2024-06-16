@@ -1,9 +1,10 @@
 import {Plugin} from "./Plugin";
 import {UserConfig} from "./UserConfig";
 import {SystemConfig} from "./SystemConfig";
-import {logBlue, logError, logGreen} from "./Log";
+import {logBlue, logDebug, logError, logGreen} from "./Log";
 import {RedirectConfig} from "./RedirectConfig";
 import {Config} from "./Config";
+import * as child_process from "node:child_process";
 
 export class Checker
 {
@@ -71,6 +72,12 @@ export class Checker
 
         if (!error)
             return;
+
+        if (userConfig.commandOnError)
+        {
+            logDebug("  Executing CommandOnError: " + userConfig.commandOnError);
+            child_process.execSync(userConfig.commandOnError);
+        }
 
         if (userConfig.failBuildOnError)
         {
