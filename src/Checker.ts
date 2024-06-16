@@ -84,7 +84,7 @@ export class Checker
             // noinspection JSUnresolvedReference
             utilsBuild.failBuild(error);
         }
-        else
+        else if (userConfig.failPluginOnError)
         {
             // noinspection JSUnresolvedReference
             utilsBuild.failPlugin(error);

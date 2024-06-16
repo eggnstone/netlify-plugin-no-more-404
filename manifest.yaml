@@ -5,7 +5,10 @@ inputs:
     default: ""
   - name: failBuildOnError
     description: "Behavior when 404 is found: abort the build or not."
-    default: true
+    default: false
+  - name: failPluginOnError
+    description: "Behavior when 404 is found: abort the plugin or not."
+    default: false
   - name: cacheKey
     description: "Name of cache key to use (e.g. 'CacheKey_1'). Choose a new name (e.g. 'CacheKey_2') to invalidate the cache."
     default: ""
